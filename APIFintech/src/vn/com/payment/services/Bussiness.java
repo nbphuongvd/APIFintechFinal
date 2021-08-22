@@ -131,7 +131,7 @@ public class Bussiness {
 	int statusDisbursement = 116;
 	SimpleDateFormat sm = new SimpleDateFormat("yyyyMMdd 00:00:00");
 
-	public Response getContractNumber(String dataContract) {aaaa
+	public Response getContractNumber(String dataContract) {
 		FileLogger.log("----------------Bat dau getContractNumber--------------------------", LogType.BUSSINESS);
 		ResponseBuilder response = Response.status(Status.OK).entity("x");
 		ContractObjRes contractObjRes = new ContractObjRes();
