@@ -256,8 +256,12 @@ public class DBFintechHome extends BaseSqlHomeDao{
 				query.setParameter("listRoom", roomID);
 			}
 			query.setParameter("listbranchId", branchID);
-			query.setFirstResult(Integer.parseInt(offSet));
-			query.setMaxResults(Integer.parseInt(limit));
+			if(ValidData.checkNull(offSet) == true){
+				query.setFirstResult(Integer.parseInt(offSet));
+			}
+			if(ValidData.checkNull(limit) == true){
+				query.setMaxResults(Integer.parseInt(limit));
+			}
 			list = query.getResultList();
 			
 			System.out.println(list.size());
@@ -1330,8 +1334,13 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			if(ValidData.checkNull(id_number) == true){
 				query.setParameter("id_number", id_number);
 			}
-			query.setFirstResult(Integer.parseInt(offSet));
-			query.setMaxResults(Integer.parseInt(limit));
+			if(ValidData.checkNull(offSet) == true){
+				query.setFirstResult(Integer.parseInt(offSet));
+			}
+			if(ValidData.checkNull(limit) == true){
+				query.setMaxResults(Integer.parseInt(limit));
+			}
+		
 			list = query.getResultList();
 			
 			System.out.println(list.size());

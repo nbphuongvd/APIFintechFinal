@@ -2045,11 +2045,18 @@ public class Bussiness {
 			List<Integer> final_statusAR = new ArrayList<>();
 			try {
 				List<String> final_status = reqDebtReminder.getFinal_status();
-				for (String string : final_status) {
-					final_statusAR.add(Integer.parseInt(string));
+				if(final_status.size() > 0){
+					for (String string : final_status) {
+						final_statusAR.add(Integer.parseInt(string));
+					}
+				}else{
+					for (int i = 116; i < 122; i++) {
+						final_statusAR.add(i);
+					}
 				}
 			} catch (Exception e) {
 			}
+			System.out.println("final_statusARaaaaa" + final_statusAR);
 			String borrower_name = reqDebtReminder.getBorrower_name();
 			String from_date = reqDebtReminder.getFrom_date();
 			String to_date = reqDebtReminder.getTo_date();
