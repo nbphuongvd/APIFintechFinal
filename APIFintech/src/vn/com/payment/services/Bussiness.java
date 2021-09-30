@@ -105,6 +105,9 @@ import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.Response.Status;
 import org.apache.commons.math.util.MathUtils;
 import org.bson.Document;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import com.google.gson.Gson;
@@ -390,6 +393,7 @@ public class Bussiness {
 			}
 			int branch_id = 0;
 			int room_id = 0;
+			boolean checkRoom = false;
 			if (ValidData.checkNull(acc.getBranchId()) == true) {
 				JSONObject isJsonObject = (JSONObject) new JSONObject(acc.getBranchId());
 				Iterator<String> keys = isJsonObject.keys();
@@ -397,10 +401,21 @@ public class Bussiness {
 					String key = keys.next();
 					System.out.println(key);
 					JSONArray msg = (JSONArray) isJsonObject.get(key);
-					System.out.println(msg);
-					System.out.println(msg.get(0));
+//					System.out.println(msg);
+//					System.out.println(msg.get(0));
 					branch_id = Integer.parseInt(key);
-					room_id = Integer.parseInt(msg.get(0).toString());
+//					if(ValidData.checkNull(msg.get(0).toString())){
+//						room_id = Integer.parseInt(msg.get(0).toString());
+//						
+//					}					
+					for (int i = 0; i < msg.length(); i++) {
+						System.out.println("aa: " + msg.get(i).toString());
+						if(ValidData.checkNull(msg.get(i).toString()) == true){
+							room_id = Integer.parseInt(msg.get(i).toString());
+							checkRoom = true;
+							break;
+						}							
+					}
 				}
 			}
 
@@ -470,6 +485,10 @@ public class Bussiness {
 			int insOrUpd = 0; // 0 insert, 1 update
 			BigDecimal total_amount_must_pay = new BigDecimal(0);
 			BigDecimal total_insterest_must_pay = new BigDecimal(0);
+			
+			BigDecimal total_monthly_interest = new BigDecimal(0); 	// tieefn laxi
+			BigDecimal total_advisory_fee = new BigDecimal(0); 		//phi tu van
+			BigDecimal total_service_fee = new BigDecimal(0); 		//phi dich vu
 
 			if (tblLoanRequest.getLoanId() != null) {
 				insOrUpd = 1;
@@ -504,8 +523,10 @@ public class Bussiness {
 				tblLoanReqDetail = new TblLoanReqDetail();
 				tblLoanRequest.setLoanId(loanID.intValue());
 				tblLoanReqDetail.setLoanId(loanID.intValue());
+				tblLoanReqDetail.setCreatedDate(new Date());
 				tblLoanRequest.setFinalStatus(statusPending);
 				tblLoanRequest.setPreviousStatus(statusPending);
+				tblLoanRequest.setCreatedDate(new Date());
 				double sotienvay = Double.valueOf(reqCreaterLoan.getLoan_amount());
 				double sothangvay = Double.valueOf(reqCreaterLoan.getLoan_for_month());
 				double loaitrano = Double.valueOf(reqCreaterLoan.getCalculate_profit_type());
@@ -515,18 +536,29 @@ public class Bussiness {
 			}
 
 			try {
-				for (TblLoanBill tblLoanBill : illustrationNewLoanBill) {
-					// setAmtToDecrYourLoan So tien con lai
-					total_amount_must_pay = total_amount_must_pay.add(tblLoanBill.getAmtToDecrYourLoan());
-					// setMonthlyInterest
-					total_insterest_must_pay = total_insterest_must_pay.add(tblLoanBill.getMonthlyInterest());
-				}
+				if(illustrationNewLoanBill != null){
+					for (TblLoanBill tblLoanBill : illustrationNewLoanBill) {
+						// setAmtToDecrYourLoan So tien con lai
+						total_amount_must_pay 		= total_amount_must_pay.add(tblLoanBill.getAmtToDecrYourLoan());
+						// setMonthlyInterest
+						total_insterest_must_pay 	= total_insterest_must_pay.add(tblLoanBill.getMonthlyInterest());
+						
+						total_monthly_interest 		= total_monthly_interest.add(tblLoanBill.getMonthlyInterest());
+						total_advisory_fee 		 	= total_advisory_fee.add(tblLoanBill.getAdvisoryFee());
+						total_service_fee 			= total_service_fee.add(tblLoanBill.getServiceFee());
+						try {
+							tblLoanRequest.setTotalMonthlyInterest(total_monthly_interest);
+							tblLoanRequest.setTotalAdvisoryFee(total_advisory_fee);
+							tblLoanRequest.setTotalServiceFee(total_service_fee);
+						} catch (Exception e) {
+							FileLogger.log("createrLoan: " + reqCreaterLoan.getUsername() + " ex setTotalMonthlyInterest, setTotalAdvisoryFee, setTotalAdvisoryFee :" + e , LogType.BUSSINESS);
+						}
+					}
+				}				
 			} catch (Exception e) {
-				FileLogger.log("createrLoan: " + reqCreaterLoan.getUsername() + " ex sum So tien con lai va :",
-						LogType.BUSSINESS);
-			}
-
-			tblLoanRequest.setCreatedDate(new Date());
+				FileLogger.log("createrLoan: " + reqCreaterLoan.getUsername() + " ex sum So tien con lai vao :" + e , LogType.BUSSINESS);
+			}		
+		
 			tblLoanRequest.setEditedDate(new Date());
 			tblLoanRequest.setExpireDate(new Date());
 			tblLoanRequest.setApprovedDate(new Date());
@@ -556,7 +588,9 @@ public class Bussiness {
 			} catch (Exception e) {
 			}
 			tblLoanRequest.setBranchId(branch_id);
-			tblLoanRequest.setRoomId(room_id);
+			if(checkRoom){
+				tblLoanRequest.setRoomId(room_id);
+			}
 			try {
 				if (ValidData.checkNull(reqCreaterLoan.getCalculate_profit_type()) == true) {
 					tblLoanRequest.setCalculateProfitType(Integer.parseInt(reqCreaterLoan.getCalculate_profit_type()));
@@ -578,6 +612,7 @@ public class Bussiness {
 			try {
 				if (ValidData.checkNull(reqCreaterLoan.getProduct_modal()) == true) {
 					tblLoanReqDetail.setProductModal(reqCreaterLoan.getProduct_modal());
+					tblLoanReqDetail.setProductId(Integer.parseInt(reqCreaterLoan.getProduct_modal()));
 				}
 			} catch (Exception e) {
 			}
@@ -593,12 +628,12 @@ public class Bussiness {
 				}
 			} catch (Exception e) {
 			}
-			try {
-				if (ValidData.checkNull(reqCreaterLoan.getProduct_id()) == true) {
-					tblLoanReqDetail.setProductId(Integer.parseInt(reqCreaterLoan.getProduct_id()));
-				}
-			} catch (Exception e) {
-			}
+//			try {
+//				if (ValidData.checkNull(reqCreaterLoan.getProduct_id()) == true) {
+//					tblLoanReqDetail.setProductId(Integer.parseInt(reqCreaterLoan.getProduct_id()));
+//				}
+//			} catch (Exception e) {
+//			}
 			try {
 				if (ValidData.checkNull(reqCreaterLoan.getProduct_serial_no()) == true) {
 					tblLoanReqDetail.setProductSerialNo(reqCreaterLoan.getProduct_serial_no());
@@ -659,7 +694,6 @@ public class Bussiness {
 				int soNgay = Integer.parseInt(reqCreaterLoan.getLoan_for_month()) * 30;
 				String ngayDaohan = Utils.getDaohan(reqCreaterLoan.getLoan_expect_date(), soNgay);
 				tblLoanReqDetail.setSettlementDate(Integer.parseInt(ngayDaohan));
-				System.out.println("aaaaaaaa");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -711,8 +745,7 @@ public class Bussiness {
 				}
 			} catch (Exception e) {
 			}
-
-			tblLoanReqDetail.setCreatedDate(new Date());
+			
 			tblLoanReqDetail.setEditedDate(new Date());
 			try {
 				if (ValidData.checkNull(reqCreaterLoan.getBorrower_address()) == true) {
@@ -924,9 +957,15 @@ public class Bussiness {
 						String key = keys.next();
 						System.out.println(key);
 						JSONArray msg = (JSONArray) isJsonObject.get(key);
+						System.out.println(msg.length());
+						System.out.println("aaaaa");
+						
 						branchID.add(new Integer(key.toString()));
 						for (int i = 0; i < msg.length(); i++) {
-							roomID.add(Integer.parseInt(msg.get(i).toString()));
+							System.out.println("aa: " + msg.get(i).toString());
+							if(ValidData.checkNull(msg.get(i).toString()) == true){
+								roomID.add(Integer.parseInt(msg.get(i).toString()));
+							}							
 						}
 					}
 				}
@@ -1029,7 +1068,9 @@ public class Bussiness {
 					JSONArray msg = (JSONArray) isJsonObject.get(key);
 					branchID.add(new Integer(key.toString()));
 					for (int i = 0; i < msg.length(); i++) {
-						roomID.add(Integer.parseInt(msg.get(i).toString()));
+						if(ValidData.checkNull(msg.get(i).toString()) == true){
+							roomID.add(Integer.parseInt(msg.get(i).toString()));
+						}							
 					}
 				}
 			}
@@ -1124,7 +1165,9 @@ public class Bussiness {
 						JSONArray msg = (JSONArray) isJsonObject.get(key);
 						branchID.add(new Integer(key.toString()));
 						for (int i = 0; i < msg.length(); i++) {
-							roomID.add(Integer.parseInt(msg.get(i).toString()));
+							if(ValidData.checkNull(msg.get(i).toString()) == true){
+								roomID.add(Integer.parseInt(msg.get(i).toString()));
+							}							
 						}
 					}
 				}
@@ -1291,7 +1334,7 @@ public class Bussiness {
 			t.start();
 			return response.header(Commons.ResponseTime, Utils.getTimeNow()).entity(resContractDetail.toJSON()).build();
 		} catch (Exception e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 			FileLogger.log("----------------Ket thuc getContractDetail Exception " + e, LogType.ERROR);
 			resContractDetail.setStatus(statusFale);
 			resContractDetail.setMessage("Yeu cau that bai - Da co loi xay ra");
@@ -1331,7 +1374,9 @@ public class Bussiness {
 					JSONArray msg = (JSONArray) isJsonObject.get(key);
 					branchID.add(new Integer(key.toString()));
 					for (int i = 0; i < msg.length(); i++) {
-						roomID.add(Integer.parseInt(msg.get(i).toString()));
+						if(ValidData.checkNull(msg.get(i).toString()) == true){
+							roomID.add(Integer.parseInt(msg.get(i).toString()));
+						}							
 					}
 				}
 			}
@@ -1439,7 +1484,9 @@ public class Bussiness {
 					JSONArray msg = (JSONArray) isJsonObject.get(key);
 					branchID.add(new Integer(key.toString()));
 					for (int i = 0; i < msg.length(); i++) {
-						roomID.add(Integer.parseInt(msg.get(i).toString()));
+						if(ValidData.checkNull(msg.get(i).toString()) == true){
+							roomID.add(Integer.parseInt(msg.get(i).toString()));
+						}							
 					}
 				}
 			}
@@ -1689,24 +1736,26 @@ public class Bussiness {
 					JSONArray msg = (JSONArray) isJsonObject.get(key);
 					branchID.add(new Integer(key.toString()));
 					for (int i = 0; i < msg.length(); i++) {
-						roomID.add(Integer.parseInt(msg.get(i).toString()));
+						if(ValidData.checkNull(msg.get(i).toString()) == true){
+							roomID.add(Integer.parseInt(msg.get(i).toString()));
+						}							
 					}
 				}
 			}
 			TblLoanRequest tblLoanRequest = dbFintechHome.getLoan(branchID, roomID, reqAppraisal.getLoan_code());
 			if (tblLoanRequest != null) {
 				TblLoanReqDetail tblLoanReqDetail = dbFintechHome.getLoanDetail(tblLoanRequest.getLoanId());
-				try {
-					boolean checkDelete = dbFintechHome.deleteTblImages(tblLoanReqDetail.getLoanId());
-					FileLogger.log("updateAppraisal checkDelete IMG: " + checkDelete, LogType.BUSSINESS);
-					// boolean checkDeleteAskAns =
-					// dbFintechHome.deleteAskAns(tblLoanReqDetail.getLoanId());
-					// FileLogger.log("updateAppraisal deleteAskAns
-					// checkDeleteAskAns: " + checkDeleteAskAns,
-					// LogType.BUSSINESS);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+//				try {
+//					boolean checkDelete = dbFintechHome.deleteTblImages(tblLoanReqDetail.getLoanId());
+//					FileLogger.log("updateAppraisal checkDelete IMG: " + checkDelete, LogType.BUSSINESS);
+//					// boolean checkDeleteAskAns =
+//					// dbFintechHome.deleteAskAns(tblLoanReqDetail.getLoanId());
+//					// FileLogger.log("updateAppraisal deleteAskAns
+//					// checkDeleteAskAns: " + checkDeleteAskAns,
+//					// LogType.BUSSINESS);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
 				List<TblImages> imagesListSet = new ArrayList<>();
 				if (reqAppraisal.getImages() != null) {
 					List<ObjImage> imagesList = reqAppraisal.getImages();
@@ -2125,7 +2174,9 @@ public class Bussiness {
 							JSONArray msg = (JSONArray) isJsonObject.get(key);
 							branchID.add(new Integer(key.toString()));
 							for (int i = 0; i < msg.length(); i++) {
-								roomID.add(Integer.parseInt(msg.get(i).toString()));
+								if(ValidData.checkNull(msg.get(i).toString()) == true){
+									roomID.add(Integer.parseInt(msg.get(i).toString()));
+								}							
 							}
 						}
 					}
@@ -2202,7 +2253,9 @@ public class Bussiness {
 					JSONArray msg = (JSONArray) isJsonObject.get(key);
 					branchID.add(new Integer(key.toString()));
 					for (int i = 0; i < msg.length(); i++) {
-						roomID.add(Integer.parseInt(msg.get(i).toString()));
+						if(ValidData.checkNull(msg.get(i).toString()) == true){
+							roomID.add(Integer.parseInt(msg.get(i).toString()));
+						}							
 					}
 				}
 			}
@@ -2285,6 +2338,7 @@ public class Bussiness {
 						tblDebtRemindHistory.setAdminRemark(reqUDExtendStatus.getAdmin_remark());
 						tblDebtRemindHistory.setBorrowerRemark(reqUDExtendStatus.getBorrower_reply_remark());
 						tblDebtRemindHistory.setRemindType(Integer.parseInt(reqUDExtendStatus.getRemind_type()));
+						tblDebtRemindHistory.setBillIndex(Integer.parseInt(reqUDExtendStatus.getBill_index()));
 					} catch (Exception e) {
 					}
 					boolean checkInsResm = dbFintechHome.createTblDebtRemindHistory(tblDebtRemindHistory);
@@ -2380,7 +2434,9 @@ public class Bussiness {
 					JSONArray msg = (JSONArray) isJsonObject.get(key);
 					branchID.add(new Integer(key.toString()));
 					for (int i = 0; i < msg.length(); i++) {
-						roomID.add(Integer.parseInt(msg.get(i).toString()));
+						if(ValidData.checkNull(msg.get(i).toString()) == true){
+							roomID.add(Integer.parseInt(msg.get(i).toString()));
+						}							
 					}
 				}
 			}
@@ -2390,18 +2446,65 @@ public class Bussiness {
 				if (getLoanBranchID.getFinalStatus().toString().equals("122") == false) {
 					System.out.println(getLoanBranchID.getFinalStatus());
 					TblLoanBillHome tblLoanBillHome = new TblLoanBillHome();
-					List<TblLoanBill> getListTblLoanBill = tblLoanBillHome
-							.getListTblLoanBill(getLoanBranchID.getLoanId(), 0);
+					List<TblLoanBill> getListTblLoanBill = tblLoanBillHome.getListTblLoanBill(getLoanBranchID.getLoanId(), 0);
+					BigDecimal real_amt_to_decr_your_loan = new BigDecimal(reqSettlement.getLatest_amt_to_decr_your_loan());
+					int maxBillIndex = dbFintechHome.maxBillIndex(getLoanBranchID.getLoanId());
+					BigDecimal realAdvisoryFee = new BigDecimal(0);
+					BigDecimal realManageFee = new BigDecimal(0);
+					int bill_id_setter = 0;
+					int bill_index_setter = 0;
+					boolean checkINS = true;
 					for (TblLoanBill tblLoanBill : getListTblLoanBill) {
+//						if(tblLoanBill.getBillIndex() < maxBillIndex){
+//							if(payAmount.compareTo(tblLoanBill.getTotalOnAMonth()) > 0){								
+//								tblLoanBill.setPaymentAmt(tblLoanBill.getTotalOnAMonth().longValue());
+//								payAmount = payAmount.subtract(tblLoanBill.getTotalOnAMonth());										
+//							}else{
+//								tblLoanBill.setPaymentAmt(payAmount.longValue());
+//								payAmount = new BigDecimal(0);
+//							}
+//						}else{
+//							tblLoanBill.setPaymentAmt(payAmount.longValue());
+//						}
+						if(tblLoanBill.getBillIndex() < maxBillIndex){
+							if(real_amt_to_decr_your_loan.compareTo(tblLoanBill.getAmtToDecrYourLoan()) > 0){								
+								tblLoanBill.setRealAmtToDecrYourLoan(tblLoanBill.getAmtToDecrYourLoan());
+								real_amt_to_decr_your_loan = real_amt_to_decr_your_loan.subtract(tblLoanBill.getAmtToDecrYourLoan());										
+							}else{
+								tblLoanBill.setRealAmtToDecrYourLoan(real_amt_to_decr_your_loan);
+								real_amt_to_decr_your_loan = new BigDecimal(0);
+							}
+						}else{
+							tblLoanBill.setRealAmtToDecrYourLoan(real_amt_to_decr_your_loan);
+						}
 						tblLoanBill.setBillPaymentStatus(1);
 						tblLoanBill.setPaymentDate(new Date());
-						tblLoanBill.setPaymentAmt(0l);
+						
+						try {
+							tblLoanBill.setRealPaymentDate(new SimpleDateFormat("yyyyMMdd").parse(reqSettlement.getReal_payment_date()));
+						} catch (Exception e) {
+						}
+						
 						tblLoanBill.setBillStatus(122);
 						tblLoanBill.setBillCollectBy(fullName);
+						
+						if(checkINS){
+							
+							bill_id_setter = tblLoanBill.getBillId();
+							bill_index_setter = tblLoanBill.getBillIndex();
+							realAdvisoryFee = new BigDecimal(reqSettlement.getReal_advisory_fee());
+							realManageFee = new BigDecimal(reqSettlement.getReal_manage_fee());
+									
+							tblLoanBill.setPaymentAmt(reqSettlement.getPay_amount());
+							tblLoanBill.setRealAdvisoryFee(realAdvisoryFee);	//Phi tu van thuc thu
+							tblLoanBill.setRealManageFee(realManageFee);		//Phi quan ly thuc thu
+						}else{
+							tblLoanBill.setRealAdvisoryFee(new BigDecimal(0));	//Phi tu van thuc thu
+							tblLoanBill.setRealManageFee(new BigDecimal(0));	//Phi quan ly thuc thu
+						}
 						boolean updLoanBill = dbFintechHome.updateTblLoanBill(tblLoanBill);
-						FileLogger.log(
-								"settlement updLoanBill BillIndex: " + tblLoanBill.getBillIndex() + " " + updLoanBill,
-								LogType.BUSSINESS);
+						checkINS = false;
+						FileLogger.log("settlement updLoanBill BillIndex: " + tblLoanBill.getBillIndex() + " " + updLoanBill,LogType.BUSSINESS);
 					}
 
 					if (reqSettlement.getImages() != null) {
@@ -2419,6 +2522,7 @@ public class Bussiness {
 							tblImages.setUploadBy(reqSettlement.getUsername());
 							tblImages.setCreatedDate(new Date());
 							tblImages.setEditedDate(new Date());
+							tblImages.setBillId(bill_id_setter);
 							boolean checkINSEImage = dbFintechHome.createTblImages(tblImages);
 							FileLogger.log("settlement checkINSEImage: " + checkINSEImage, LogType.BUSSINESS);
 						}
@@ -2428,8 +2532,13 @@ public class Bussiness {
 					getLoanBranchID.setPreviousStatus(getLoanBranchID.getFinalStatus());
 					getLoanBranchID.setFinalStatus(122); // 122 = tat toan
 					getLoanBranchID.setSettleDate(Utils.getDateNow());
-					getLoanBranchID.setSettleAmount(new BigDecimal(0));
+					
 					getLoanBranchID.setLatestUpdate(new Date());
+					getLoanBranchID.setBillIndexSettlement(bill_index_setter);
+					try {
+						getLoanBranchID.setSettleAmount(new BigDecimal(reqSettlement.getPay_amount()));
+					} catch (Exception e) {
+					}
 					try {
 						getLoanBranchID.setLatestAmtToDecrYourLoan(
 								new BigDecimal(reqSettlement.getLatest_amt_to_decr_your_loan()));
@@ -2539,7 +2648,9 @@ public class Bussiness {
 					JSONArray msg = (JSONArray) isJsonObject.get(key);
 					branchID.add(new Integer(key.toString()));
 					for (int i = 0; i < msg.length(); i++) {
-						roomID.add(Integer.parseInt(msg.get(i).toString()));
+						if(ValidData.checkNull(msg.get(i).toString()) == true){
+							roomID.add(Integer.parseInt(msg.get(i).toString()));
+						}							
 					}
 				}
 			}
@@ -2547,8 +2658,7 @@ public class Bussiness {
 			TblLoanRequest getLoanBranchID = dbFintechHome.getLoanBranchID(branchID, loan_code);
 			if (getLoanBranchID != null) {
 				if (getLoanBranchID.getFinalStatus().toString().equals("122") == false) {
-					TblLoanBill tblLoanBill = tblLoanBillHome.getTblLoanBillIndex(getLoanBranchID.getLoanId(),
-							Integer.parseInt(reqPayment.getBill_index()));
+					TblLoanBill tblLoanBill = tblLoanBillHome.getTblLoanBillIndex(getLoanBranchID.getLoanId(),Integer.parseInt(reqPayment.getBill_index()));
 					if (tblLoanBill != null) {
 						System.out.println(tblLoanBill.getBillId());
 						int maxBillIndex = dbFintechHome.maxBillIndex(getLoanBranchID.getLoanId());
@@ -2566,7 +2676,7 @@ public class Bussiness {
 						if (reqPayment.getIs_a_special_payment().equals("0")) {
 							// Đóng lãi thường
 							BigDecimal tiencanTT = tblLoanBill.getTotalOnAMonth();
-							if (tieTT.compareTo(tiencanTT) >= 0) {
+//							if (tieTT.compareTo(tiencanTT) >= 0) {
 								// Chap nhan thanh toan
 								tblLoanBill.setBillPaymentStatus(1);
 								tblLoanBill.setPaymentDate(new Date());
@@ -2574,13 +2684,11 @@ public class Bussiness {
 								tblLoanBill.setBillCollectBy(fullName);
 								tblLoanBill.setIsASpecialPayment(0);
 								try {
-									tblLoanBill.setRealPaymentDate(
-											new SimpleDateFormat("yyyyMMdd").parse(reqPayment.getReal_payment_date()));
+									tblLoanBill.setRealPaymentDate(new SimpleDateFormat("yyyyMMdd").parse(reqPayment.getReal_payment_date()));
 								} catch (Exception e) {
 								}
 								try {
-									tblLoanBill.setRealAmtToDecrYourLoan(
-											new BigDecimal(reqPayment.getReal_amt_to_decr_your_loan()));
+									tblLoanBill.setRealAmtToDecrYourLoan(new BigDecimal(reqPayment.getReal_amt_to_decr_your_loan()));
 								} catch (Exception e) {
 								}
 								try {
@@ -2606,6 +2714,31 @@ public class Bussiness {
 								}
 								FileLogger.log("paymentLoan tblLoanBill success dong lai thuong: ", LogType.BUSSINESS);
 
+								//Check qua han thanh toan cong tong tien vs phi
+								DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
+								String dateNow =  new SimpleDateFormat("yyyyMMdd").format(new Date());
+								LocalDate dayMustPay = formatter.parseLocalDate(String.valueOf(tblLoanBill.getDayMustPay()));
+								LocalDate dayNow = formatter.parseLocalDate(dateNow);
+								boolean isBefore = dayMustPay.isBefore(dayNow);
+								if(isBefore){
+									BigDecimal totalAmt = tblLoanBill.getTotalOnAMonth().add(new BigDecimal(tblLoanBill.getOverDueFee()));
+//									tblLoanBill.setTotalOnAMonth(totalAmt);
+									tblLoanBill.setPaymentAmt(totalAmt.longValue());			
+								}
+								if(Integer.parseInt(reqPayment.getBill_index()) < maxBillIndex){
+									BigDecimal previousPeriodDebtFee = new BigDecimal(0);
+									BigDecimal totalAmt = tblLoanBill.getTotalOnAMonth().add(new BigDecimal(tblLoanBill.getOverDueFee()));
+									if(tblLoanBill.getPreviousPeriodDebtFee() != null){
+										previousPeriodDebtFee = totalAmt.add(tblLoanBill.getPreviousPeriodDebtFee()).subtract(tieTT);
+									}else{
+										previousPeriodDebtFee = totalAmt.add(new BigDecimal(0)).subtract(tieTT);
+									}
+									int indexBill = tblLoanBill.getBillIndex() + 1;
+									FileLogger.log("paymentLoan updLoanBill billindex: " + indexBill + " _ previousPeriodDebtFee: "+ previousPeriodDebtFee, LogType.BUSSINESS);
+									boolean checkUPDBillPre = dbFintechHome.updateLoanBillPhitruocno(tblLoanBill.getLoanId(), indexBill, previousPeriodDebtFee);
+									FileLogger.log("paymentLoan updLoanBill checkUPDBillPre: " + checkUPDBillPre, LogType.BUSSINESS);
+									
+								}
 								boolean updLoanBill = dbFintechHome.updateTblLoanBill(tblLoanBill);
 								FileLogger.log("paymentLoan updLoanBill: " + updLoanBill, LogType.BUSSINESS);
 								// boolean updLoanBill = true;
@@ -2621,15 +2754,15 @@ public class Bussiness {
 									resPayment.setStatus(statusFale);
 									resPayment.setMessage("Yeu cau that bai");
 								}
-							} else {
-								// Khong chap nhan thanh toan
-								FileLogger.log("paymentLoan tblLoanBill false so tien dong no < tien can thanh toan: ",
-										LogType.BUSSINESS);
-								resPayment.setStatus(statusFale);
-								resPayment.setMessage("Yeu cau that bai - so tien dong no < tien can thanh toan");
-							}
+//							} else {
+//								// Khong chap nhan thanh toan
+//								FileLogger.log("paymentLoan tblLoanBill false so tien dong no < tien can thanh toan: ",
+//										LogType.BUSSINESS);
+//								resPayment.setStatus(statusFale);
+//								resPayment.setMessage("Yeu cau that bai - so tien dong no < tien can thanh toan");
+//							}
 						} else if (reqPayment.getIs_a_special_payment().equals("1")) {
-							// Đóng lãi đặc biệt
+							// Đóng lãi đặc biệt  
 							tblLoanBill.setBillPaymentStatus(1);
 							tblLoanBill.setPaymentDate(new Date());
 							tblLoanBill.setPaymentAmt(tieTT.longValue());
@@ -2646,8 +2779,7 @@ public class Bussiness {
 							} catch (Exception e) {
 							}
 							try {
-								tblLoanBill
-										.setRealMonthlyInterest(new BigDecimal(reqPayment.getReal_monthly_interest()));
+								tblLoanBill.setRealMonthlyInterest(new BigDecimal(reqPayment.getReal_monthly_interest()));
 							} catch (Exception e) {
 							}
 							try {
@@ -2666,6 +2798,20 @@ public class Bussiness {
 								tblLoanBill.setRealLatePayFee(new BigDecimal(reqPayment.getReal_late_pay_fee()));
 							} catch (Exception e) {
 							}
+							if(Integer.parseInt(reqPayment.getBill_index()) < maxBillIndex){
+								BigDecimal previousPeriodDebtFee = new BigDecimal(0);
+								BigDecimal totalAmt = tblLoanBill.getTotalOnAMonth().add(new BigDecimal(tblLoanBill.getOverDueFee()));
+								if(tblLoanBill.getPreviousPeriodDebtFee() != null){
+									previousPeriodDebtFee = totalAmt.add(tblLoanBill.getPreviousPeriodDebtFee()).subtract(tieTT);
+								}else{
+									previousPeriodDebtFee = totalAmt.add(new BigDecimal(0)).subtract(tieTT);
+								}
+								int indexBill = tblLoanBill.getBillIndex() + 1;
+								FileLogger.log("paymentLoan updLoanBill billindex: " + indexBill + " _ previousPeriodDebtFee: "+ previousPeriodDebtFee, LogType.BUSSINESS);
+								boolean checkUPDBillPre = dbFintechHome.updateLoanBillPhitruocno(tblLoanBill.getLoanId(), indexBill, previousPeriodDebtFee);
+								FileLogger.log("paymentLoan updLoanBill checkUPDBillPre: " + checkUPDBillPre, LogType.BUSSINESS);
+							}
+							
 							boolean updLoanBill = dbFintechHome.updateTblLoanBill(tblLoanBill);
 							FileLogger.log("paymentLoan updLoanBill: " + updLoanBill, LogType.BUSSINESS);
 
@@ -2703,6 +2849,7 @@ public class Bussiness {
 								tblImages.setUploadBy(reqPayment.getUsername());
 								tblImages.setCreatedDate(new Date());
 								tblImages.setEditedDate(new Date());
+								tblImages.setBillId(tblLoanBill.getBillId());
 								boolean checkINSEImage = dbFintechHome.createTblImages(tblImages);
 								FileLogger.log("paymentLoan checkINSEImage: " + checkINSEImage, LogType.BUSSINESS);
 							}
@@ -2711,8 +2858,7 @@ public class Bussiness {
 							// Tat toan
 							FileLogger.log("paymentLoan tblLoanBill tat toan: ", LogType.BUSSINESS);
 							getLoanBranchID.setPreviousStatus(getLoanBranchID.getFinalStatus());
-							getLoanBranchID.setFinalStatus(122); // 122 = tat
-																	// toan
+							getLoanBranchID.setFinalStatus(122); // 122 = tat toan
 							getLoanBranchID.setSettleDate(Utils.getDateNow());
 							getLoanBranchID.setSettleAmount(new BigDecimal(0));
 							getLoanBranchID.setLatestUpdate(new Date());
@@ -3066,7 +3212,9 @@ public class Bussiness {
 					JSONArray msg = (JSONArray) isJsonObject.get(key);
 					branchID.add(new Integer(key.toString()));
 					for (int i = 0; i < msg.length(); i++) {
-						roomID.add(Integer.parseInt(msg.get(i).toString()));
+						if(ValidData.checkNull(msg.get(i).toString()) == true){
+							roomID.add(Integer.parseInt(msg.get(i).toString()));
+						}							
 					}
 				}
 			}

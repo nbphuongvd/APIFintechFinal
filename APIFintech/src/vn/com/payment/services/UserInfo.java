@@ -85,6 +85,7 @@ public class UserInfo {
 				resLogin.setRequire_change_pass(0);
 				resLogin.setMessage("Dữ liệu đăng nhập không đúng định dạng");
 				resLogin.setFull_name("");
+				resLogin.setRoles_id("");
 				return response.header(Commons.ResponseTime, getTimeNow()).entity(resLogin.toJSON()).build();
 			}
 //			Account acc = accountHome.getAccountLogin(reqLogin.getUsername(), MD5.hash(reqLogin.getPwd()), reqLogin.getType());
@@ -104,6 +105,7 @@ public class UserInfo {
 					resLogin.setRequire_change_pass(0);
 					resLogin.setMessage("Sai mật khẩu");
 					resLogin.setFull_name("");
+					resLogin.setRoles_id("");
 					return response.header(Commons.ResponseTime, getTimeNow()).entity(resLogin.toJSON()).build();
 				}
 				if(reqLogin.getType() != acc.getType()){
@@ -114,6 +116,7 @@ public class UserInfo {
 					resLogin.setRequire_change_pass(0);
 					resLogin.setMessage("Sai thông tin đăng nhập vui lòng kiểm tra lại với admin dịch vụ");
 					resLogin.setFull_name("");
+					resLogin.setRoles_id("");
 					return response.header(Commons.ResponseTime, getTimeNow()).entity(resLogin.toJSON()).build();
 				}
 				
@@ -196,6 +199,7 @@ public class UserInfo {
 					    jsonObject.put("message", "Đăng nhập thành công");
 					    jsonObject.put("full_name", fullName);
 					    jsonObject.put("branch_id", acc.getBranchId());
+					    jsonObject.put("roles_id", acc.getRolesId());
 						response = response.header(Commons.ReceiveTime, getTimeNow());	
 						tblSystemActions.setResponseData(jsonObject.toString());
 						Thread t = new Thread(new ThreadInsertActionLog(tblSystemActions));
@@ -224,6 +228,7 @@ public class UserInfo {
 				    jsonObject.put("message", "Đăng nhập thành công");
 				    jsonObject.put("full_name", fullName);
 				    jsonObject.put("branch_id", acc.getBranchId());
+				    jsonObject.put("roles_id", acc.getRolesId());
 					response = response.header(Commons.ReceiveTime, getTimeNow());
 					tblSystemActions.setResponseData(jsonObject.toString());
 					Thread t = new Thread(new ThreadInsertActionLog(tblSystemActions));
@@ -237,6 +242,7 @@ public class UserInfo {
 				resLogin.setRequire_change_pass(0);
 				resLogin.setMessage("Sai tên đăng nhập");
 				resLogin.setFull_name("");
+				resLogin.setRoles_id("");
 				response = response.header(Commons.ReceiveTime, getTimeNow());
 			}
 			
@@ -252,6 +258,7 @@ public class UserInfo {
 			resLogin.setRequire_change_pass(0);
 			resLogin.setMessage("Đã có lỗi xảy ra - vui lòng kiểm tra lại với admin dịch vụ");
 			resLogin.setFull_name("");
+			resLogin.setRoles_id("");
 			response = response.header(Commons.ReceiveTime, getTimeNow());
 			return response.header(Commons.ResponseTime, getTimeNow()).entity(resLogin.toJSON()).build();
 		}

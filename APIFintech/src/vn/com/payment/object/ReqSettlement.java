@@ -15,6 +15,8 @@ public class ReqSettlement {
 	public long	  latest_amt_to_decr_your_loan; //Gốc kỳ gần nhất
 	public long	  settle_fee;					//Phí settle
 	public long	  interest_till_now;			//Lãi phát sinh đến ngày thanh toán
+	public long	  real_advisory_fee;			//Phi tu van thu.c thu
+	public long	  real_manage_fee;				//Phi quan ly thu.c thu
 
 	public List<ObjImage> images;
 	public String toJSON(){
@@ -92,6 +94,18 @@ public class ReqSettlement {
 	}
 	public void setInterest_till_now(long interest_till_now) {
 		this.interest_till_now = interest_till_now;
+	}
+	public long getReal_advisory_fee() {
+		return real_advisory_fee;
+	}
+	public void setReal_advisory_fee(long real_advisory_fee) {
+		this.real_advisory_fee = real_advisory_fee;
+	}
+	public long getReal_manage_fee() {
+		return real_manage_fee;
+	}
+	public void setReal_manage_fee(long real_manage_fee) {
+		this.real_manage_fee = real_manage_fee;
 	}
 	
 }

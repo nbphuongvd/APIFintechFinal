@@ -10,6 +10,7 @@ public class ResLogin {
 	public String message;
 	public String full_name;
 	public String branch_id;
+	public String roles_id;
 	public String toJSON(){
 		String json	=	"";
 		try {
@@ -74,6 +75,14 @@ public class ResLogin {
 
 	public void setBranch_id(String branch_id) {
 		this.branch_id = branch_id;
+	}
+
+	public String getRoles_id() {
+		return roles_id;
+	}
+
+	public void setRoles_id(String roles_id) {
+		this.roles_id = roles_id;
 	}
 	
 }

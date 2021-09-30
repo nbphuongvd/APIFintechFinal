@@ -13,6 +13,11 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+
 //import vn.com.payment.config.MainCfg;
 
 @Path("/")
@@ -308,7 +313,8 @@ public class ApiController {
    
    static {
 	   setTimeZone();
-//	   ConfigDAO.shareInstance();
+	   Logger logger = (Logger) LoggerFactory.getLogger("org.mongodb.driver");
+	   logger.setLevel(Level.OFF);
 	}
 
    private static void setTimeZone() {

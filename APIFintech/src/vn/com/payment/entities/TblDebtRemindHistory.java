@@ -1,5 +1,5 @@
 package vn.com.payment.entities;
-// Generated 29-Jul-2021 21:48:37 by Hibernate Tools 3.5.0.Final
+// Generated 06-Sep-2021 01:14:29 by Hibernate Tools 3.5.0.Final
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -26,6 +26,7 @@ public class TblDebtRemindHistory implements java.io.Serializable {
 	private String adminRemark;
 	private String borrowerRemark;
 	private Integer remindType;
+	private Integer billIndex;
 
 	public TblDebtRemindHistory() {
 	}
@@ -36,7 +37,7 @@ public class TblDebtRemindHistory implements java.io.Serializable {
 	}
 
 	public TblDebtRemindHistory(int loanId, String loanCode, Date createdDate, String createdBy, String adminRemark,
-			String borrowerRemark, Integer remindType) {
+			String borrowerRemark, Integer remindType, Integer billIndex) {
 		this.loanId = loanId;
 		this.loanCode = loanCode;
 		this.createdDate = createdDate;
@@ -44,6 +45,7 @@ public class TblDebtRemindHistory implements java.io.Serializable {
 		this.adminRemark = adminRemark;
 		this.borrowerRemark = borrowerRemark;
 		this.remindType = remindType;
+		this.billIndex = billIndex;
 	}
 
 	@Id
@@ -120,6 +122,15 @@ public class TblDebtRemindHistory implements java.io.Serializable {
 
 	public void setRemindType(Integer remindType) {
 		this.remindType = remindType;
+	}
+
+	@Column(name = "bill_index")
+	public Integer getBillIndex() {
+		return this.billIndex;
+	}
+
+	public void setBillIndex(Integer billIndex) {
+		this.billIndex = billIndex;
 	}
 
 }

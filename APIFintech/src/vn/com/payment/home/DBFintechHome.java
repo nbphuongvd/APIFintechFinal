@@ -19,6 +19,9 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.LocalDate;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.google.gson.Gson;
 import com.mongodb.DB;
@@ -189,9 +192,9 @@ public class DBFintechHome extends BaseSqlHomeDao{
 								+ "tr.roomName, br.branchName, lr.loanId, lr.extendStatus, lr.insuranceStatus, lr.insurancePaidAmount, "
 								+ "lr.partnerInsuranceCode, lr.partnerInsuranceId "
 								+ "FROM TblLoanReqDetail ld "
-								+ "INNER JOIN TblLoanRequest lr ON lr.loanId = ld.loanId "
-								+ "INNER JOIN Branch br ON br.rowId in lr.branchId "
-								+ "INNER JOIN TransasctionRoom tr ON tr.rowId in lr.roomId "
+								+ "LEFT JOIN TblLoanRequest lr ON lr.loanId = ld.loanId "
+								+ "LEFT JOIN Branch br ON br.rowId in lr.branchId "
+								+ "LEFT JOIN TransasctionRoom tr ON tr.rowId in lr.roomId "
 								+ "Where "
 								+ "lr.branchId in :listbranchId ";
 			if(ValidData.checkNull(loan_code) == true){
@@ -363,7 +366,10 @@ public class DBFintechHome extends BaseSqlHomeDao{
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			String sql = "SELECT count(lr.loanCode)"
-								+ "FROM TblLoanReqDetail ld INNER JOIN TblLoanRequest lr ON lr.loanId = ld.loanId "
+								+ "FROM TblLoanReqDetail ld "
+								+ "LEFT JOIN TblLoanRequest lr ON lr.loanId = ld.loanId "
+								+ "LEFT JOIN Branch br ON br.rowId in lr.branchId "
+								+ "LEFT JOIN TransasctionRoom tr ON tr.rowId in lr.roomId "
 								+ "Where "
 								+ "lr.branchId in :listbranchId ";
 			if(ValidData.checkNull(loan_code) == true){
@@ -460,41 +466,41 @@ public class DBFintechHome extends BaseSqlHomeDao{
 		return null;
 	}
 	
-	public boolean checkLoan(List<Integer> branchID, List<Integer> roomID, String loanID) {
-		Session session = null;
-		Transaction tx = null;
-		List<Object> list = null;
-		List<ResContractList> lisResContractList = new ArrayList<>();		
-		String time = String.valueOf(10);
-		boolean result = false;
-		try {
-			session = HibernateUtil.getSessionFactory().openSession();
-			String sql = "SELECT loanCode FROM TblLoanRequest Where "
-								+ "loanId =:loanID and "
-								+ "roomId in :listRoom and "
-								+ "branchId in :listbranchId";
-			System.out.println("sql: "+ sql);
-			session = HibernateUtil.getSessionFactory().openSession();
-			Query query = session.createQuery(sql);
-			query.setParameter("loanCode", loanID);
-			query.setParameter("listRoom", roomID);
-			query.setParameter("listbranchId", branchID);
-			list = query.getResultList();
-			if(list.size() <= 0){
-				result = false;
-			}else{
-				result = true;
-			}
-			System.out.println(list.size());
-			return result;
-		} catch (Exception e) {
-			FileLogger.log(">> checkLoan err " + e.getMessage(),LogType.ERROR);
-			e.printStackTrace();
-		} finally {
-			releaseSession(session);
-		}
-		return false;
-	}
+//	public boolean checkLoan11(List<Integer> branchID, List<Integer> roomID, String loanID) {
+//		Session session = null;
+//		Transaction tx = null;
+//		List<Object> list = null;
+//		List<ResContractList> lisResContractList = new ArrayList<>();		
+//		String time = String.valueOf(10);
+//		boolean result = false;
+//		try {
+//			session = HibernateUtil.getSessionFactory().openSession();
+//			String sql = "SELECT loanCode FROM TblLoanRequest Where "
+//								+ "loanId =:loanID and "
+//								+ "roomId in :listRoom and "
+//								+ "branchId in :listbranchId";
+//			System.out.println("sql: "+ sql);
+//			session = HibernateUtil.getSessionFactory().openSession();
+//			Query query = session.createQuery(sql);
+//			query.setParameter("loanCode", loanID);
+//			query.setParameter("listRoom", roomID);
+//			query.setParameter("listbranchId", branchID);
+//			list = query.getResultList();
+//			if(list.size() <= 0){
+//				result = false;
+//			}else{
+//				result = true;
+//			}
+//			System.out.println(list.size());
+//			return result;
+//		} catch (Exception e) {
+//			FileLogger.log(">> checkLoan err " + e.getMessage(),LogType.ERROR);
+//			e.printStackTrace();
+//		} finally {
+//			releaseSession(session);
+//		}
+//		return false;
+//	}
 	
 	
 	public TblLoanRequest getLoan(List<Integer> branchID, List<Integer> roomID, String loanCode) {
@@ -505,15 +511,19 @@ public class DBFintechHome extends BaseSqlHomeDao{
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			String sql = "FROM TblLoanRequest Where "
-								+ "loanCode =:loanCode and "
-								+ "roomId in :listRoom and "
-								+ "branchId in :listbranchId";
+								+ "loanCode =:loanCode "
+								+ "and branchId in :listbranchId ";
+			if(roomID.size() > 0){
+				sql = sql + "and roomId in :listRoom  ";
+			}
 			System.out.println("sql: "+ sql);
 			sql = sql + " ORDER BY createdDate DESC";
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query query = session.createQuery(sql);
 			query.setParameter("loanCode", loanCode);
-			query.setParameter("listRoom", roomID);
+			if(roomID.size() > 0){
+				query.setParameter("listRoom", roomID);
+			}
 			query.setParameter("listbranchId", branchID);
 			list = query.getResultList();
 			if(list.size() > 0){
@@ -539,17 +549,21 @@ public class DBFintechHome extends BaseSqlHomeDao{
 		try {
 			session = HibernateUtil.getSessionFactory().openSession();
 			String sql = "FROM TblLoanRequest Where "
-								+ "loanCode =:loanCode and "
-								+ "createdBy =:createdBy and "
-								+ "roomId in :listRoom and "
-								+ "branchId in :listbranchId";
+								+ "loanCode =:loanCode "
+								+ "and createdBy =:createdBy "
+								+ "and branchId in :listbranchId ";
 			System.out.println("sql: "+ sql);
+			if(roomID.size() > 0){
+				sql = sql + "and roomId in :listRoom  ";
+			}
 			sql = sql + " ORDER BY createdDate DESC";
 			session = HibernateUtil.getSessionFactory().openSession();
 			Query query = session.createQuery(sql);
 			query.setParameter("loanCode", loanCode);
 			query.setParameter("createdBy", createdBy);
-			query.setParameter("listRoom", roomID);
+			if(roomID.size() > 0){
+				query.setParameter("listRoom", roomID);
+			}
 			query.setParameter("listbranchId", branchID);
 			list = query.getResultList();
 			if(list.size() > 0){
@@ -1606,7 +1620,29 @@ public class DBFintechHome extends BaseSqlHomeDao{
 		}
 		return result;
     }
-	
+	public boolean updateLoanBillPhitruocno(int loan_id, int bill_index, BigDecimal previousPeriodDebtFee) {
+		Session session = null;
+		Transaction tx = null;
+		boolean result = false;
+		try {
+			session = HibernateUtil.getSessionFactory().openSession();
+			String sql = "update TblLoanBill set previousPeriodDebtFee =:previousPeriodDebtFee where loanId =:loanIDUPD and billIndex =:billIndexUPD";	
+			tx = session.beginTransaction();
+			Query query = session.createQuery(sql);
+			query.setParameter("previousPeriodDebtFee", previousPeriodDebtFee);
+			query.setParameter("loanIDUPD", loan_id);
+			query.setParameter("billIndexUPD", bill_index);
+			int check = query.executeUpdate();
+			tx.commit();
+			result = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			FileLogger.log(">> updateLoanBill err " + e,LogType.ERROR);
+		}finally {
+			releaseSession(session);
+		}
+		return result;
+    }
 	
 	public int maxBillIndex(int loanID) {
 		Session session = null;
@@ -2149,11 +2185,28 @@ public class DBFintechHome extends BaseSqlHomeDao{
 //		boolean check = dbFintechHome.checkS1ponso(19);
 //		System.out.println(check);
 //		
-		List<TblImages> getTblImagesJoin = dbFintechHome.getTblImagesJoin(174);
-		for (TblImages tblImages : getTblImagesJoin) {
-			System.out.println(tblImages.getUploadBy());
-			System.out.println(tblImages.getCreatedDate());
-		}
+		TblLoanBillHome tblLoanBillHome = new TblLoanBillHome();
+		TblLoanBill tblLoanBill = tblLoanBillHome.getTblLoanBillIndex(201,1);
+		int aa = tblLoanBill.getDayMustPay();
+		
+		
+		DateTimeFormatter formatter = DateTimeFormat.forPattern("yyyyMMdd");
+		String dateNow =  new SimpleDateFormat("yyyyMMdd").format(new Date());
+		LocalDate localDate1 = formatter.parseLocalDate(String.valueOf(aa));
+		LocalDate localDate2 = formatter.parseLocalDate(dateNow);
+		
+		System.out.println(localDate1);
+		System.out.println(localDate2);
+		System.out.println("---------");
+		boolean is1After2 = localDate1.isBefore(localDate2);
+		
+		System.out.println(is1After2);
+
+//		List<TblImages> getTblImagesJoin = dbFintechHome.getTblImagesJoin(174);
+//		for (TblImages tblImages : getTblImagesJoin) {
+//			System.out.println(tblImages.getUploadBy());
+//			System.out.println(tblImages.getCreatedDate());
+//		}
 //		
 //		int maxBillIndex = dbFintechHome.maxBillIndex(160);
 //		TblInbox getInboxs = dbFintechHome.getInbox("supercub@mailinator.com", 1);

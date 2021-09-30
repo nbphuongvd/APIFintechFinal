@@ -110,6 +110,7 @@ public class Caculator {
 //								phituvan = (double) fees.getFix_fee_percent();
 //								tinhphituvan_a = (sotienconlai_a - kyvay * sotienconlai_a / sothangvay) * phituvan * 30.41666667 / 365;
 								tinhphituvan_a = (sotienconlai_a - kyvay * sotienconlai_a / sothangvay) * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
+								tinhphituvan_a = Math.round(MathUtils.round(tinhphituvan_a, - lamtronHangDonvi));
 //							} else {
 //								phituvan = (double) fees.getFix_fee_amount();
 //								tinhphituvan_a = phituvan;
@@ -119,6 +120,7 @@ public class Caculator {
 //							if (fees.getFix_fee_amount() <= 0) {
 //								phidichvu = (double) fees.getFix_fee_percent();
 								tinhphidichvu_a = (sotienconlai_a - kyvay * sotienconlai_a / sothangvay) * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
+								tinhphidichvu_a = Math.round(MathUtils.round(tinhphidichvu_a, - lamtronHangDonvi));
 //							} else {
 //								phidichvu = (double) fees.getFix_fee_amount();
 //								tinhphidichvu_a = phidichvu;
@@ -160,8 +162,17 @@ public class Caculator {
 						tinhphitattoan_a = gocconlai * tinhphitattoan_aPT + tinhphitattoan_aAM;
 					}
 					gocconlai = gocconlai - tiengoc;
-					if(gocconlai < 0){
+					if(gocconlai < 100){
 						gocconlai = 0;
+					}
+					if(tienlaithang_a < 100){
+						tienlaithang_a = 0;
+					}
+					if(tinhphituvan_a < 100){
+						tinhphituvan_a = 0;
+					}
+					if(tinhphidichvu_a < 100){
+						tinhphidichvu_a = 0;
 					}
 					Document doc = new Document("idMinhhoa", billID)
 							.append("Kyvay", i)
@@ -229,6 +240,7 @@ public class Caculator {
 //							if (fees.getFix_fee_amount() <= 0) {
 //								phituvan = (double) fees.getFix_fee_percent();
 								tinhphituvan = sotienconlai * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
+								tinhphituvan = Math.round(MathUtils.round(tinhphituvan, - lamtronHangDonvi));
 //							} else {
 //								phituvan = (double) fees.getFix_fee_amount();
 //								tinhphituvan = phituvan;
@@ -238,6 +250,7 @@ public class Caculator {
 //							if (fees.getFix_fee_amount() <= 0) {
 //								phidichvu = (double) fees.getFix_fee_percent();
 								tinhphidichvu = sotienconlai * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
+								tinhphidichvu = Math.round(MathUtils.round(tinhphidichvu, - lamtronHangDonvi));
 //							} else {
 //								phidichvu = (double) fees.getFix_fee_amount();
 //								tinhphidichvu = phidichvu;
@@ -280,6 +293,15 @@ public class Caculator {
 					}
 					if(sotienconlai < 0){
 						sotienconlai = 0;
+					}
+					if(tienlaithang < 100){
+						tienlaithang = 0;
+					}
+					if(tinhphituvan < 100){
+						tinhphituvan = 0;
+					}
+					if(tinhphidichvu < 100){
+						tinhphidichvu = 0;
 					}
 					Document doc = new Document("idMinhhoa", billID).append("Kyvay", i)
 							.append("Ngaythanhtoan", Utils.getNgayvay(ngayvay))
@@ -399,7 +421,8 @@ public class Caculator {
 //								phituvan = (double) fees.getFix_fee_percent();
 //								tinhphituvan_a = (sotienconlai_a - kyvay * sotienconlai_a / sothangvay) * phituvan * 30.41666667 / 365;
 								tinhphituvan_a = (sotienconlai_a - kyvay * sotienconlai_a / sothangvay) * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
-//							} else {
+								tinhphituvan_a = Math.round(MathUtils.round(tinhphituvan_a, - lamtronHangDonvi));
+//								} else {
 //								phituvan = (double) fees.getFix_fee_amount();
 //								tinhphituvan_a = phituvan;
 //							}
@@ -408,7 +431,8 @@ public class Caculator {
 //							if (fees.getFix_fee_amount() <= 0) {
 //								phidichvu = (double) fees.getFix_fee_percent();
 								tinhphidichvu_a = (sotienconlai_a - kyvay * sotienconlai_a / sothangvay) * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
-//							} else {
+								tinhphidichvu_a = Math.round(MathUtils.round(tinhphidichvu_a, - lamtronHangDonvi));
+								//							} else {
 //								phidichvu = (double) fees.getFix_fee_amount();
 //								tinhphidichvu_a = phidichvu;
 //							}
@@ -447,8 +471,17 @@ public class Caculator {
 						tinhphitattoan_a = gocconlai * tinhphitattoan_aPT + tinhphitattoan_aAM;
 					}
 					gocconlai = gocconlai - tiengoc;
-					if(gocconlai < 0){
+					if(gocconlai < 100){
 						gocconlai = 0;
+					}
+					if(tienlaithang_a < 100){
+						tienlaithang_a = 0;
+					}
+					if(tinhphituvan_a < 100){
+						tinhphituvan_a = 0;
+					}
+					if(tinhphidichvu_a < 100){
+						tinhphidichvu_a = 0;
 					}
 					Document doc = new Document("idMinhhoa", billID).append("Kyvay", i)
 							.append("Ngaythanhtoan", Utils.getNgayvay(ngayvay))
@@ -501,7 +534,7 @@ public class Caculator {
 //							if (fees.getFix_fee_amount() <= 0) {
 //								laixuatNam = (double) fees.getFix_fee_percent();
 								tienlaithang = sotienconlai * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
-								tienlaithang = Math.round(MathUtils.round(tienlaithang, - lamtronHangDonvi));
+								tienlaithang = Math.round(MathUtils.round(tienlaithang, - lamtronHangDonvi));								
 //							} else {
 //								laixuatNam = (double) fees.getFix_fee_amount();
 //								tienlaithang = laixuatNam;
@@ -512,6 +545,7 @@ public class Caculator {
 //							if (fees.getFix_fee_amount() <= 0) {
 //								phituvan = (double) fees.getFix_fee_percent();
 								tinhphituvan = sotienconlai * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
+								tinhphituvan = Math.round(MathUtils.round(tinhphituvan, - lamtronHangDonvi));
 //							} else {
 //								phituvan = (double) fees.getFix_fee_amount();
 //								tinhphituvan = phituvan;
@@ -521,7 +555,8 @@ public class Caculator {
 //							if (fees.getFix_fee_amount() <= 0) {
 //								phidichvu = (double) fees.getFix_fee_percent();
 								tinhphidichvu = sotienconlai * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
-//							} else {
+								tinhphidichvu = Math.round(MathUtils.round(tinhphidichvu, - lamtronHangDonvi));
+								//							} else {
 //								phidichvu = (double) fees.getFix_fee_amount();
 //								tinhphidichvu = phidichvu;
 //							}
@@ -563,6 +598,15 @@ public class Caculator {
 					}
 					if(sotienconlai < 0){
 						sotienconlai = 0;
+					}
+					if(tienlaithang < 100){
+						tienlaithang = 0;
+					}
+					if(tinhphituvan < 100){
+						tinhphituvan = 0;
+					}
+					if(tinhphidichvu < 100){
+						tinhphidichvu = 0;
 					}
 					Document doc = new Document("idMinhhoa", billID).append("Kyvay", i)
 							.append("Ngaythanhtoan", Utils.getNgayvay(ngayvay))
@@ -660,6 +704,7 @@ public class Caculator {
 //						if (fees.getFix_fee_amount() <= 0) {
 //							phituvan = (double) fees.getFix_fee_percent();
 							tinhphituvan_a = (sotienconlai_a - kyvay * sotienconlai_a / sothangvay) * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
+							tinhphituvan_a = Math.round(MathUtils.round(tinhphituvan_a, - lamtronHangDonvi));
 //						} else {
 //							phituvan = (double) fees.getFix_fee_amount();
 //							tinhphituvan_a = phituvan;
@@ -669,6 +714,7 @@ public class Caculator {
 //						if (fees.getFix_fee_amount() <= 0) {
 //							phidichvu = (double) fees.getFix_fee_percent();
 							tinhphidichvu_a = (sotienconlai_a - kyvay * sotienconlai_a / sothangvay) * (double) fees.getFix_fee_percent() * 30.41666667 / 365 + (double) fees.getFix_fee_amount();
+							tinhphidichvu_a = Math.round(MathUtils.round(tinhphidichvu_a, - lamtronHangDonvi));
 //						} else {
 //							phidichvu = (double) fees.getFix_fee_amount();
 //							tinhphidichvu_a = phidichvu;

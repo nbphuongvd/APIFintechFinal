@@ -1,5 +1,5 @@
 package vn.com.payment.entities;
-// Generated Jul 1, 2021 12:50:47 AM by Hibernate Tools 3.5.0.Final
+// Generated 08-Sep-2021 00:34:11 by Hibernate Tools 3.5.0.Final
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -53,11 +53,20 @@ public class TblLoanRequest implements java.io.Serializable {
 	private BigDecimal totalPaidForInterest;
 	private BigDecimal totalAmountOverdue;
 	private BigDecimal totalInterestOverdue;
-	private BigDecimal totalAmountMustPay;       // Goc con` phai thu
-	private BigDecimal totalInsterestMustPay; 	 // 'Lai con` phai? thu
+	private BigDecimal totalAmountMustPay;
+	private BigDecimal totalInsterestMustPay;
 	private BigDecimal settlementFee;
 	private BigDecimal insurancePaidAmtFrApi;
 	private BigDecimal insuranceFeeFrApi;
+	private String expertiseStep2By;
+	private Date expertiseStep2On;
+	private String expertiseStep3By;
+	private Date expertiseStep3On;
+	private Long totalPenaltyFee;
+	private BigDecimal totalMonthlyInterest;
+	private BigDecimal totalAdvisoryFee;
+	private BigDecimal totalServiceFee;
+	private Integer billIndexSettlement;
 
 	public TblLoanRequest() {
 	}
@@ -77,7 +86,10 @@ public class TblLoanRequest implements java.io.Serializable {
 			BigDecimal insuranceFeeAmt, String partnerInsuranceCode, String partnerInsuranceId,
 			BigDecimal totalPaidOnLoan, BigDecimal totalPaidForInterest, BigDecimal totalAmountOverdue,
 			BigDecimal totalInterestOverdue, BigDecimal totalAmountMustPay, BigDecimal totalInsterestMustPay,
-			BigDecimal settlementFee, BigDecimal insurancePaidAmtFrApi, BigDecimal insuranceFeeFrApi) {
+			BigDecimal settlementFee, BigDecimal insurancePaidAmtFrApi, BigDecimal insuranceFeeFrApi,
+			String expertiseStep2By, Date expertiseStep2On, String expertiseStep3By, Date expertiseStep3On,
+			Long totalPenaltyFee, BigDecimal totalMonthlyInterest, BigDecimal totalAdvisoryFee,
+			BigDecimal totalServiceFee, Integer billIndexSettlement) {
 		this.createdDate = createdDate;
 		this.editedDate = editedDate;
 		this.expireDate = expireDate;
@@ -116,6 +128,15 @@ public class TblLoanRequest implements java.io.Serializable {
 		this.settlementFee = settlementFee;
 		this.insurancePaidAmtFrApi = insurancePaidAmtFrApi;
 		this.insuranceFeeFrApi = insuranceFeeFrApi;
+		this.expertiseStep2By = expertiseStep2By;
+		this.expertiseStep2On = expertiseStep2On;
+		this.expertiseStep3By = expertiseStep3By;
+		this.expertiseStep3On = expertiseStep3On;
+		this.totalPenaltyFee = totalPenaltyFee;
+		this.totalMonthlyInterest = totalMonthlyInterest;
+		this.totalAdvisoryFee = totalAdvisoryFee;
+		this.totalServiceFee = totalServiceFee;
+		this.billIndexSettlement = billIndexSettlement;
 	}
 
 	@Id
@@ -476,6 +497,89 @@ public class TblLoanRequest implements java.io.Serializable {
 
 	public void setInsuranceFeeFrApi(BigDecimal insuranceFeeFrApi) {
 		this.insuranceFeeFrApi = insuranceFeeFrApi;
+	}
+
+	@Column(name = "expertise_step2_by", length = 100)
+	public String getExpertiseStep2By() {
+		return this.expertiseStep2By;
+	}
+
+	public void setExpertiseStep2By(String expertiseStep2By) {
+		this.expertiseStep2By = expertiseStep2By;
+	}
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "expertise_step2_on", length = 19)
+	public Date getExpertiseStep2On() {
+		return this.expertiseStep2On;
+	}
+
+	public void setExpertiseStep2On(Date expertiseStep2On) {
+		this.expertiseStep2On = expertiseStep2On;
+	}
+
+	@Column(name = "expertise_step3_by", length = 100)
+	public String getExpertiseStep3By() {
+		return this.expertiseStep3By;
+	}
+
+	public void setExpertiseStep3By(String expertiseStep3By) {
+		this.expertiseStep3By = expertiseStep3By;
+	}
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "expertise_step3_on", length = 10)
+	public Date getExpertiseStep3On() {
+		return this.expertiseStep3On;
+	}
+
+	public void setExpertiseStep3On(Date expertiseStep3On) {
+		this.expertiseStep3On = expertiseStep3On;
+	}
+
+	@Column(name = "total_penalty_fee", precision = 10, scale = 0)
+	public Long getTotalPenaltyFee() {
+		return this.totalPenaltyFee;
+	}
+
+	public void setTotalPenaltyFee(Long totalPenaltyFee) {
+		this.totalPenaltyFee = totalPenaltyFee;
+	}
+
+	@Column(name = "total_monthly_interest", precision = 20, scale = 0)
+	public BigDecimal getTotalMonthlyInterest() {
+		return this.totalMonthlyInterest;
+	}
+
+	public void setTotalMonthlyInterest(BigDecimal totalMonthlyInterest) {
+		this.totalMonthlyInterest = totalMonthlyInterest;
+	}
+
+	@Column(name = "total_advisory_fee", precision = 20, scale = 0)
+	public BigDecimal getTotalAdvisoryFee() {
+		return this.totalAdvisoryFee;
+	}
+
+	public void setTotalAdvisoryFee(BigDecimal totalAdvisoryFee) {
+		this.totalAdvisoryFee = totalAdvisoryFee;
+	}
+
+	@Column(name = "total_service_fee", precision = 20, scale = 0)
+	public BigDecimal getTotalServiceFee() {
+		return this.totalServiceFee;
+	}
+
+	public void setTotalServiceFee(BigDecimal totalServiceFee) {
+		this.totalServiceFee = totalServiceFee;
+	}
+
+	@Column(name = "bill_index_settlement")
+	public Integer getBillIndexSettlement() {
+		return this.billIndexSettlement;
+	}
+
+	public void setBillIndexSettlement(Integer billIndexSettlement) {
+		this.billIndexSettlement = billIndexSettlement;
 	}
 
 }

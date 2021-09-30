@@ -333,7 +333,6 @@ public class BaseSqlHomeDao {
 					if(obj5 != null){
 						session.save(obj5);
 					}
-					System.out.println("aaa");
 				}else{
 					session.saveOrUpdate(obj1);
 					session.saveOrUpdate(obj2);
@@ -350,9 +349,10 @@ public class BaseSqlHomeDao {
 					if(obj5 != null){
 						session.saveOrUpdate(obj5);
 					}
-					System.out.println("aaa");
 				}
+				FileLogger.log("BaseSqlHomeDao before transaction commit", LogType.BUSSINESS);
 				transaction.commit();
+				FileLogger.log("BaseSqlHomeDao after transaction commit", LogType.BUSSINESS);
 				result = true;
 			} catch (Exception e) {
 				FileLogger.log("BaseSqlHomeDao saveOrUpdateTransaction Exception e " + e, LogType.ERROR);
