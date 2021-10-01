@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import vn.com.payment.config.LogType;
+import vn.com.payment.ultities.FileLogger;
 
 //import vn.com.payment.config.MainCfg;
 
@@ -313,8 +315,9 @@ public class ApiController {
    
    static {
 	   setTimeZone();
-	   Logger logger = (Logger) LoggerFactory.getLogger("org.mongodb.driver");
-	   logger.setLevel(Level.OFF);
+//	FileLogger.log("----------------Bat dau getContractNumber--------------------------", LogType.BUSSINESS);
+//	   Logger logger = (Logger) LoggerFactory.getLogger("org.mongodb.driver");
+//	   logger.setLevel(Level.OFF);
 	}
 
    private static void setTimeZone() {
