@@ -527,6 +527,7 @@ public class Bussiness {
 				tblLoanRequest.setFinalStatus(statusPending);
 				tblLoanRequest.setPreviousStatus(statusPending);
 				tblLoanRequest.setCreatedDate(new Date());
+				tblLoanRequest.setCreatedBy(reqCreaterLoan.getUsername());
 				double sotienvay = Double.valueOf(reqCreaterLoan.getLoan_amount());
 				double sothangvay = Double.valueOf(reqCreaterLoan.getLoan_for_month());
 				double loaitrano = Double.valueOf(reqCreaterLoan.getCalculate_profit_type());
@@ -561,8 +562,7 @@ public class Bussiness {
 		
 			tblLoanRequest.setEditedDate(new Date());
 			tblLoanRequest.setExpireDate(new Date());
-			tblLoanRequest.setApprovedDate(new Date());
-			tblLoanRequest.setCreatedBy(reqCreaterLoan.getUsername());
+			tblLoanRequest.setApprovedDate(new Date());			
 			tblLoanRequest.setApprovedBy(reqCreaterLoan.getUsername());
 			tblLoanRequest.setLatestUpdate(new Date());
 
