@@ -86,6 +86,7 @@ public class UserInfo {
 				resLogin.setMessage("Dữ liệu đăng nhập không đúng định dạng");
 				resLogin.setFull_name("");
 				resLogin.setRoles_id("");
+				resLogin.setRow_id("");
 				return response.header(Commons.ResponseTime, getTimeNow()).entity(resLogin.toJSON()).build();
 			}
 //			Account acc = accountHome.getAccountLogin(reqLogin.getUsername(), MD5.hash(reqLogin.getPwd()), reqLogin.getType());
@@ -106,6 +107,7 @@ public class UserInfo {
 					resLogin.setMessage("Sai mật khẩu");
 					resLogin.setFull_name("");
 					resLogin.setRoles_id("");
+					resLogin.setRow_id("");
 					return response.header(Commons.ResponseTime, getTimeNow()).entity(resLogin.toJSON()).build();
 				}
 				if(reqLogin.getType() != acc.getType()){
@@ -117,6 +119,7 @@ public class UserInfo {
 					resLogin.setMessage("Sai thông tin đăng nhập vui lòng kiểm tra lại với admin dịch vụ");
 					resLogin.setFull_name("");
 					resLogin.setRoles_id("");
+					resLogin.setRow_id("");
 					return response.header(Commons.ResponseTime, getTimeNow()).entity(resLogin.toJSON()).build();
 				}
 				
@@ -200,6 +203,7 @@ public class UserInfo {
 					    jsonObject.put("full_name", fullName);
 					    jsonObject.put("branch_id", acc.getBranchId());
 					    jsonObject.put("roles_id", acc.getRolesId());
+					    jsonObject.put("row_id", acc.getRowId());
 						response = response.header(Commons.ReceiveTime, getTimeNow());	
 						tblSystemActions.setResponseData(jsonObject.toString());
 						Thread t = new Thread(new ThreadInsertActionLog(tblSystemActions));
@@ -212,6 +216,7 @@ public class UserInfo {
 						resLogin.setRequire_change_pass(0);
 						resLogin.setMessage("Đã có lỗi xảy ra - vui lòng kiểm tra lại với admin dịch vụ");
 						resLogin.setFull_name("");
+						resLogin.setRow_id("");
 						response = response.header(Commons.ReceiveTime, getTimeNow());
 					}
 				}else{
@@ -229,6 +234,7 @@ public class UserInfo {
 				    jsonObject.put("full_name", fullName);
 				    jsonObject.put("branch_id", acc.getBranchId());
 				    jsonObject.put("roles_id", acc.getRolesId());
+				    jsonObject.put("row_id", acc.getRowId());
 					response = response.header(Commons.ReceiveTime, getTimeNow());
 					tblSystemActions.setResponseData(jsonObject.toString());
 					Thread t = new Thread(new ThreadInsertActionLog(tblSystemActions));
@@ -259,6 +265,7 @@ public class UserInfo {
 			resLogin.setMessage("Đã có lỗi xảy ra - vui lòng kiểm tra lại với admin dịch vụ");
 			resLogin.setFull_name("");
 			resLogin.setRoles_id("");
+			resLogin.setRow_id("");
 			response = response.header(Commons.ReceiveTime, getTimeNow());
 			return response.header(Commons.ResponseTime, getTimeNow()).entity(resLogin.toJSON()).build();
 		}
@@ -509,6 +516,7 @@ public class UserInfo {
 				    jsonObjectInfo.put("branch_id", acc.getBranchId());
 				    jsonObjectInfo.put("type", acc.getType());
 				    jsonObjectInfo.put("branch_id", acc.getBranchId());
+				    jsonObjectInfo.put("row_id", acc.getRowId());
 				    
 				    tblSystemActions.setResponseData(jsonObjectInfo.toString());
 					Thread t = new Thread(new ThreadInsertActionLog(tblSystemActions));

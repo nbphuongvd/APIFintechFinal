@@ -11,6 +11,7 @@ public class ResLogin {
 	public String full_name;
 	public String branch_id;
 	public String roles_id;
+	public String row_id;
 	public String toJSON(){
 		String json	=	"";
 		try {
@@ -83,6 +84,14 @@ public class ResLogin {
 
 	public void setRoles_id(String roles_id) {
 		this.roles_id = roles_id;
+	}
+
+	public String getRow_id() {
+		return row_id;
+	}
+
+	public void setRow_id(String row_id) {
+		this.row_id = row_id;
 	}
 	
 }
