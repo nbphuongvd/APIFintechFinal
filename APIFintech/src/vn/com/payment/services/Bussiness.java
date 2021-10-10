@@ -2444,8 +2444,7 @@ public class Bussiness {
 			TblLoanRequest getLoanBranchID = dbFintechHome.getLoanBranchID(branchID, loan_code);
 			if (getLoanBranchID != null) {
 				if (getLoanBranchID.getFinalStatus().toString().equals("122") == false) {
-					System.out.println(getLoanBranchID.getFinalStatus());
-					TblLoanBillHome tblLoanBillHome = new TblLoanBillHome();
+					System.out.println(getLoanBranchID.getFinalStatus());					
 					List<TblLoanBill> getListTblLoanBill = tblLoanBillHome.getListTblLoanBill(getLoanBranchID.getLoanId(), 0);
 					BigDecimal real_amt_to_decr_your_loan = new BigDecimal(reqSettlement.getLatest_amt_to_decr_your_loan());
 					int maxBillIndex = dbFintechHome.maxBillIndex(getLoanBranchID.getLoanId());
@@ -2507,6 +2506,8 @@ public class Bussiness {
 						FileLogger.log("settlement updLoanBill BillIndex: " + tblLoanBill.getBillIndex() + " " + updLoanBill,LogType.BUSSINESS);
 					}
 
+					//fsdfsd
+					
 					if (reqSettlement.getImages() != null) {
 						List<ObjImage> imagesList = reqSettlement.getImages();
 						for (ObjImage objImage : imagesList) {
@@ -2567,7 +2568,10 @@ public class Bussiness {
 
 					boolean checkINSExpertiseSteps = dbFintechHome.createExpertiseSteps(tblLoanExpertiseSteps);
 					FileLogger.log("settlement checkINSExpertiseSteps: " + checkINSExpertiseSteps, LogType.BUSSINESS);
-
+					TblLoanBill getTblLoanBillIndex = tblLoanBillHome.getTblLoanBillIndex(getLoanBranchID.getLoanId(), maxBillIndex);
+					getTblLoanBillIndex.setBillPaymentStatus(1);
+					boolean updLoanBillMax = dbFintechHome.updateTblLoanBill(getTblLoanBillIndex);
+					FileLogger.log("settlement updLoanBill update PaymentStatus = 1 : " + getTblLoanBillIndex.getBillIndex() + " " + updLoanBillMax,LogType.BUSSINESS);
 					if (checkUPDLoan && checkINSExpertiseSteps) {
 						resSettlement.setStatus(statusSuccess);
 						resSettlement.setMessage("Yeu cau thanh cong");

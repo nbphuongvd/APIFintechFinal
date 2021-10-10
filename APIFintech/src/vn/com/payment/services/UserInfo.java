@@ -620,6 +620,7 @@ public class UserInfo {
 //			boolean sentNoti = userInfo.sentNotify(key, "userName" , subject, content, message, isHtml, receiveEmail, receiveSMS, receiveChat, serviceCode, subService);
 //			System.out.println("sentNoti: " + sentNoti);
 			System.out.println(MD5.hash("123456"));
+			System.out.println(MD5.hash("12345678"));
 			System.out.println(MD5.hash(MD5.hash("12345678")));
 			// 123456 e10adc3949ba59abbe56e057f20f883e
 			// 12345678 25d55ad283aa400af464c76d713c07ad
