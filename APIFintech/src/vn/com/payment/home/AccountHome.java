@@ -8,14 +8,11 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.Account;
 import vn.com.payment.ultities.FileLogger;
 import vn.com.payment.ultities.MD5;
@@ -28,7 +25,7 @@ import vn.com.payment.ultities.MD5;
 @Stateless
 public class AccountHome extends BaseSqlHomeDao{
 
-	private static final Log log = LogFactory.getLog(AccountHome.class);
+	private FileLogger log = new FileLogger(AccountHome.class);
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -99,7 +96,7 @@ public class AccountHome extends BaseSqlHomeDao{
 				acc = listAcc.get(0);
 			}
 		} catch (Exception e) {
-			FileLogger.log(" getAccount Exception "+ e, LogType.ERROR);
+			log.fatal(" getAccount Exception ",e);
 			throw e;
 		} finally {
 			releaseSession(session);
@@ -126,7 +123,7 @@ public class AccountHome extends BaseSqlHomeDao{
 				acc = listAcc.get(0);
 			}
 		} catch (Exception e) {
-			FileLogger.log(" getAccount Exception "+ e, LogType.ERROR);
+			log.fatal(" getAccount Exception ",e);
 			throw e;
 		} finally {
 			releaseSession(session);

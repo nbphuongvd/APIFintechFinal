@@ -12,7 +12,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.TblRateConfig;
 import vn.com.payment.ultities.FileLogger;
 
@@ -23,7 +22,7 @@ import vn.com.payment.ultities.FileLogger;
  */
 @Stateless
 public class TblRateConfigHome extends BaseSqlHomeDao{
-
+	private FileLogger log = new FileLogger(TblRateConfigHome.class);
 	@PersistenceContext
 	private EntityManager entityManager;
 	public List<TblRateConfig> getRateConfig(int type) {
@@ -39,7 +38,7 @@ public class TblRateConfigHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getProduct Exception "+ e, LogType.ERROR);
+			log.fatal(" getProduct Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);

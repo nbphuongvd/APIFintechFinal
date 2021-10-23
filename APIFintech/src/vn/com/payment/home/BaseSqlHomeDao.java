@@ -17,7 +17,6 @@ import org.hibernate.exception.ConstraintViolationException;
 //import org.hibernate.query.Query;
 import org.springframework.orm.hibernate5.SessionFactoryUtils;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.CompareObj;
 import vn.com.payment.entities.TblImages;
 import vn.com.payment.entities.TblLoanBill;
@@ -28,7 +27,7 @@ import vn.com.payment.ultities.FileLogger;
 //import vn.com.payment.ultities.GsonUltilities;
 
 public class BaseSqlHomeDao {
-	
+	private FileLogger log = new FileLogger(BaseSqlHomeDao.class);
 	public Criteria createSearchCriteria(String table, ArrayList<CompareObj> compareObjs, Criteria criteria)
 			throws Exception {
 
@@ -111,7 +110,7 @@ public class BaseSqlHomeDao {
 		} catch (Exception re) {
 			re.printStackTrace();
 //			String object2Persist = GsonUltilities.toJson(transientInstance);
-			FileLogger.log("persist ex" + re.getMessage(), LogType.ERROR);
+			log.fatal("persist ex" , re);
 			// log.fatal("persist failed[" + object2Persist + "]", re);
 			// composeAlertAndSend(re);
 		} finally {
@@ -301,7 +300,7 @@ public class BaseSqlHomeDao {
 //			return result;
 //		} catch (Exception re) {
 //			re.printStackTrace();
-//			FileLogger.log("BaseSqlHomeDao saveTransaction Exception " + re, LogType.ERROR);
+//			log.fatal("BaseSqlHomeDao saveTransaction Exception " , re);
 //		} finally {
 //			releaseSession(session);
 //		}
@@ -350,12 +349,12 @@ public class BaseSqlHomeDao {
 						session.saveOrUpdate(obj5);
 					}
 				}
-				FileLogger.log("BaseSqlHomeDao before transaction commit", LogType.BUSSINESS);
+				log.info("BaseSqlHomeDao before transaction commit");
 				transaction.commit();
-				FileLogger.log("BaseSqlHomeDao after transaction commit", LogType.BUSSINESS);
+				log.info("BaseSqlHomeDao after transaction commit");
 				result = true;
 			} catch (Exception e) {
-				FileLogger.log("BaseSqlHomeDao saveOrUpdateTransaction Exception e " + e, LogType.ERROR);
+				log.fatal("BaseSqlHomeDao saveOrUpdateTransaction Exception e " , e);
 				session.flush();
 				session.clear();
 			}
@@ -363,7 +362,7 @@ public class BaseSqlHomeDao {
 			return result;
 		} catch (Exception re) {
 			re.printStackTrace();
-			FileLogger.log("BaseSqlHomeDao saveOrUpdateTransaction Exception re " + re, LogType.ERROR);
+			log.fatal("BaseSqlHomeDao saveOrUpdateTransaction Exception re " , re);
 		} finally {
 			releaseSession(session);
 		}
@@ -414,7 +413,7 @@ public class BaseSqlHomeDao {
 			return result;
 		} catch (Exception re) {
 			re.printStackTrace();
-			FileLogger.log("BaseSqlHomeDao saveTransaction Exception " + re, LogType.ERROR);
+			log.fatal("BaseSqlHomeDao saveTransaction Exception " , re);
 		} finally {
 			releaseSession(session);
 		}
@@ -448,7 +447,7 @@ public class BaseSqlHomeDao {
 			return result;
 		} catch (Exception re) {
 			re.printStackTrace();
-			FileLogger.log("BaseSqlHomeDao saveOrUpdateTransIMG Exception " + re, LogType.ERROR);
+			log.fatal("BaseSqlHomeDao saveOrUpdateTransIMG Exception " , re);
 		} finally {
 			releaseSession(session);
 		}

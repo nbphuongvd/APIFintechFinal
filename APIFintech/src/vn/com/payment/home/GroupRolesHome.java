@@ -11,7 +11,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.GroupRoles;
 import vn.com.payment.ultities.FileLogger;
 
@@ -25,7 +24,7 @@ public class GroupRolesHome extends BaseSqlHomeDao{
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
+	private FileLogger log = new FileLogger(GroupMapPerHome.class);
 	public GroupRoles getGroupRoles(int roleID) {
 //		List<GroupMapPer> results = new ArrayList<>();
 		GroupRoles groupRoles = null;
@@ -42,7 +41,7 @@ public class GroupRolesHome extends BaseSqlHomeDao{
 			}
 			return groupRoles;
 		} catch (Exception e) {
-			FileLogger.log(" getGroupMapPer Exception "+ e, LogType.ERROR);
+			log.fatal(" getGroupMapPer Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);

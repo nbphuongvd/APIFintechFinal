@@ -27,7 +27,6 @@ import com.google.gson.Gson;
 import com.mongodb.DB;
 
 import ch.qos.logback.core.net.SyslogOutputStream;
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.TblBlackList;
 import vn.com.payment.entities.TblBorrower;
 import vn.com.payment.entities.TblDebtRemindHistory;
@@ -47,13 +46,13 @@ import vn.com.payment.object.InsuranceProviders;
 import vn.com.payment.object.ObjDebtReminderDetail;
 import vn.com.payment.object.ResContractList;
 import vn.com.payment.object.ResContractListSponsor;
+import vn.com.payment.services.Caculator;
 import vn.com.payment.ultities.FileLogger;
 import vn.com.payment.ultities.ValidData;
 
 public class DBFintechHome extends BaseSqlHomeDao{
 
-	private static final Log log = LogFactory.getLog(DBFintechHome.class);
-
+	private FileLogger log = new FileLogger(DBFintechHome.class);
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -61,14 +60,14 @@ public class DBFintechHome extends BaseSqlHomeDao{
 	
 	public boolean createTblDebtRemindHistory(TblDebtRemindHistory TblDebtRemindHistory) {
 		try {
-			FileLogger.log("createTblDebtRemindHistory "+ gson.toJson(TblDebtRemindHistory), LogType.BUSSINESS);
+			log.info("createTblDebtRemindHistory "+ gson.toJson(TblDebtRemindHistory));
 			save(TblDebtRemindHistory);
-			FileLogger.log("createTblDebtRemindHistory id: "+ TblDebtRemindHistory.getRowId(), LogType.BUSSINESS);
+			log.info("createTblDebtRemindHistory id: "+ TblDebtRemindHistory.getRowId());
 			System.out.println("id: " + TblDebtRemindHistory.getRowId());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createTblDebtRemindHistory Exception "+ e, LogType.ERROR);
+			log.fatal("createTblDebtRemindHistory Exception ", e);
 		}
 		return false;
 	}
@@ -76,56 +75,56 @@ public class DBFintechHome extends BaseSqlHomeDao{
 	
 	public boolean createSystemActions(TblSystemActions tblSystemActions) {
 		try {
-			FileLogger.log("createSystemActions "+ gson.toJson(tblSystemActions), LogType.BUSSINESS);
+			log.info("createSystemActions "+ gson.toJson(tblSystemActions));
 			save(tblSystemActions);
-			FileLogger.log("createSystemActions id: "+ tblSystemActions.getActionId(), LogType.BUSSINESS);
+			log.info("createSystemActions id: "+ tblSystemActions.getActionId());
 			System.out.println("id: " + tblSystemActions.getActionId());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createSystemActions Exception "+ e, LogType.ERROR);
+			log.fatal("createSystemActions Exception ", e);
 		}
 		return false;
 	}
 	
 	public boolean createExpertiseSteps(TblLoanExpertiseSteps tblLoanExpertiseSteps) {
 		try {
-			FileLogger.log("createExpertiseSteps "+ gson.toJson(tblLoanExpertiseSteps), LogType.BUSSINESS);
+			log.info("createExpertiseSteps "+ gson.toJson(tblLoanExpertiseSteps));
 			save(tblLoanExpertiseSteps);
-			FileLogger.log("createExpertiseSteps id: "+ tblLoanExpertiseSteps.getLoanExpertiseId(), LogType.BUSSINESS);
+			log.info("createExpertiseSteps id: "+ tblLoanExpertiseSteps.getLoanExpertiseId());
 			System.out.println("id: " + tblLoanExpertiseSteps.getLoanExpertiseId());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createExpertiseSteps Exception "+ e, LogType.ERROR);
+			log.fatal("createExpertiseSteps Exception ", e);
 		}
 		return false;
 	}
 	
 	public boolean createTblLoanSponsorMapp(TblLoanSponsorMapp tblLoanSponsorMapp) {
 		try {
-			FileLogger.log("createTblLoanSponsorMapp "+ gson.toJson(tblLoanSponsorMapp), LogType.BUSSINESS);
+			log.info("createTblLoanSponsorMapp "+ gson.toJson(tblLoanSponsorMapp));
 			save(tblLoanSponsorMapp);
-			FileLogger.log("createTblLoanSponsorMapp id: "+ tblLoanSponsorMapp.getSponsorId(), LogType.BUSSINESS);
+			log.info("createTblLoanSponsorMapp id: "+ tblLoanSponsorMapp.getSponsorId());
 			System.out.println("id: " + tblLoanSponsorMapp.getSponsorId());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createTblLoanSponsorMapp Exception "+ e, LogType.ERROR);
+			log.fatal("createTblLoanSponsorMapp Exception ", e);
 		}
 		return false;
 	}
 	
 	public boolean createTblBorrower(TblBorrower tblBorrower) {
 		try {
-			FileLogger.log("createTblBorrower "+ gson.toJson(tblBorrower), LogType.BUSSINESS);
+			log.info("createTblBorrower "+ gson.toJson(tblBorrower));
 			save(tblBorrower);
-			FileLogger.log("createTblBorrower id: "+ tblBorrower.getBorrowerId(), LogType.BUSSINESS);
+			log.info("createTblBorrower id: "+ tblBorrower.getBorrowerId());
 			System.out.println("id: " + tblBorrower.getBorrowerId());
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createTblBorrower Exception "+ e, LogType.ERROR);
+			log.fatal("createTblBorrower Exception ", e);
 		}
 		return false;
 	}
@@ -136,7 +135,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("updateExpertiseSteps Exception "+ e, LogType.ERROR);
+			log.fatal("updateExpertiseSteps Exception ", e);
 		}
 		return false;
 	}
@@ -147,7 +146,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("updateExpertiseSteps Exception "+ e, LogType.ERROR);
+			log.fatal("updateExpertiseSteps Exception ", e);
 		}
 		return false;
 	}
@@ -158,7 +157,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("updateExpertiseSteps Exception "+ e, LogType.ERROR);
+			log.fatal("updateExpertiseSteps Exception ", e);
 		}
 		return false;
 	}
@@ -169,7 +168,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("updateExpertiseSteps Exception "+ e, LogType.ERROR);
+			log.fatal("updateExpertiseSteps Exception ", e);
 		}
 		return false;
 	}
@@ -347,7 +346,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return lisResContractList;
 		} catch (Exception e) {
-			FileLogger.log(">> listResContractList err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> listResContractList err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -439,7 +438,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return (long)list.get(0);
 		} catch (Exception e) {
-			FileLogger.log(">> listResContractList err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> listResContractList err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -458,7 +457,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getProduct Exception "+ e, LogType.ERROR);
+			log.fatal(" getProduct Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -494,7 +493,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 //			System.out.println(list.size());
 //			return result;
 //		} catch (Exception e) {
-//			FileLogger.log(">> checkLoan err " + e.getMessage(),LogType.ERROR);
+//			log.info(">> checkLoan err " , e);
 //			e.printStackTrace();
 //		} finally {
 //			releaseSession(session);
@@ -533,7 +532,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			
 		} catch (Exception e) {
-			FileLogger.log(">> checkLoan err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> checkLoan err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -573,7 +572,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			
 		} catch (Exception e) {
-			FileLogger.log(">> checkLoan err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> checkLoan err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -606,7 +605,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			
 		} catch (Exception e) {
-			FileLogger.log(">> checkLoan err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> checkLoan err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -637,7 +636,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			
 		} catch (Exception e) {
-			FileLogger.log(">> checkLoan err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> checkLoan err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -651,7 +650,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createTblLoanExpertiseSteps Exception "+ e, LogType.ERROR);
+			log.info("createTblLoanExpertiseSteps Exception ", e);
 		}
 		return false;
 	}
@@ -663,7 +662,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createTblLoanExpertiseSteps Exception "+ e, LogType.ERROR);
+			log.fatal("createTblLoanExpertiseSteps Exception ", e);
 		}
 		return false;
 	}
@@ -683,7 +682,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 				return tblLoanReqDetail;
 			}
 		} catch (Exception e) {
-			FileLogger.log(" getLoanDetail Exception "+ e, LogType.ERROR);
+			log.fatal(" getLoanDetail Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -705,7 +704,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 //			}
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getTblImages Exception "+ e, LogType.ERROR);
+			log.fatal(" getTblImages Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -808,7 +807,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(">> getTblImagesJoin err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> getTblImagesJoin err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -833,7 +832,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 //			}
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getRequestAskAns Exception "+ e, LogType.ERROR);
+			log.fatal(" getRequestAskAns Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -856,7 +855,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			}
 			return tblLoanRequest;
 		} catch (Exception e) {
-			FileLogger.log(" getTblLoanRequest Exception "+ e, LogType.ERROR);
+			log.fatal(" getTblLoanRequest Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -991,7 +990,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return lisResContractListSponsor;
 		} catch (Exception e) {
-			FileLogger.log(">> lisResContractListSponsor err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> lisResContractListSponsor err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1066,7 +1065,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return (long)list.get(0);
 		} catch (Exception e) {
-			FileLogger.log(">> listResContractList err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> listResContractList err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1109,7 +1108,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return lisResContractList;
 		} catch (Exception e) {
-			FileLogger.log(">> checkLoan err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> checkLoan err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1132,7 +1131,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log(">> deleteTblImages err " + e,LogType.ERROR);
+			log.info(">> deleteTblImages err " , e);
 		}finally {
 			releaseSession(session);
 		}
@@ -1154,7 +1153,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log(">> deleteTblImages err " + e,LogType.ERROR);
+			log.fatal(">> deleteTblImages err " , e);
 		}finally {
 			releaseSession(session);
 		}
@@ -1176,7 +1175,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log(">> deleteAskAns err " + e,LogType.ERROR);
+			log.fatal(">> deleteAskAns err " , e);
 		}finally {
 			releaseSession(session);
 		}
@@ -1450,7 +1449,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return lisResDebtReminderDetail;
 		} catch (Exception e) {
-			FileLogger.log(">> lisResDebtReminderDetail err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> lisResDebtReminderDetail err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1589,7 +1588,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return (long)list.get(0);
 		} catch (Exception e) {
-			FileLogger.log(">> lisResDebtReminderDetail err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> lisResDebtReminderDetail err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1614,7 +1613,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log(">> updateLoanBill err " + e,LogType.ERROR);
+			log.fatal(">> updateLoanBill err " , e);
 		}finally {
 			releaseSession(session);
 		}
@@ -1637,7 +1636,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log(">> updateLoanBill err " + e,LogType.ERROR);
+			log.fatal(">> updateLoanBill err " , e);
 		}finally {
 			releaseSession(session);
 		}
@@ -1661,7 +1660,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return (int)list.get(0);
 		} catch (Exception e) {
-			FileLogger.log(">> lisResDebtReminderDetail err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> lisResDebtReminderDetail err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1684,7 +1683,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getInboxs Exception "+ e, LogType.ERROR);
+			log.fatal(" getInboxs Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1710,7 +1709,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return (long)list.get(0);
 		} catch (Exception e) {
-			FileLogger.log(">> lisResDebtReminderDetail err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> lisResDebtReminderDetail err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1734,7 +1733,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return (long)list.get(0);
 		} catch (Exception e) {
-			FileLogger.log(">> countAllTblInbox err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> countAllTblInbox err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1761,7 +1760,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			}
 			return tblInbox;
 		} catch (Exception e) {
-			FileLogger.log(" getInboxs Exception "+ e, LogType.ERROR);
+			log.fatal(" getInboxs Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1786,7 +1785,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			}
 			return tblLoanBill;
 		} catch (Exception e) {
-			FileLogger.log(" getTblLoanBill Exception "+ e, LogType.ERROR);
+			log.fatal(" getTblLoanBill Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1800,7 +1799,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("updateTblInbox Exception "+ e, LogType.ERROR);
+			log.info("updateTblInbox Exception ", e);
 		}
 		return false;
 	}
@@ -1826,7 +1825,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return result;
 		} catch (Exception e) {
-			FileLogger.log(">> checkSponso err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> checkSponso err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1851,7 +1850,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 				return tblLoanSponsorMapp;
 			}
 		} catch (Exception e) {
-			FileLogger.log(" getLoanSponsorMapp Exception "+ e, LogType.ERROR);
+			log.fatal(" getLoanSponsorMapp Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1874,7 +1873,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 				return tblLoanSponsorMapp;
 			}
 		} catch (Exception e) {
-			FileLogger.log(" getLoanSponsorMappLoanID Exception "+ e, LogType.ERROR);
+			log.fatal(" getLoanSponsorMappLoanID Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1898,7 +1897,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 				return tblSponsor;
 			}
 		} catch (Exception e) {
-			FileLogger.log(" getSponsor Exception "+ e, LogType.ERROR);
+			log.fatal(" getSponsor Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1926,7 +1925,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return tblSponsor;
 		} catch (Exception e) {
-			FileLogger.log(">> checkSponso err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> checkSponso err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -1949,7 +1948,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 				return tblInsuranceProviders;
 			}
 		} catch (Exception e) {
-			FileLogger.log(" getLoanSponsorMapp Exception "+ e, LogType.ERROR);
+			log.fatal(" getLoanSponsorMapp Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -2033,7 +2032,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return insuranceProviders;
 		} catch (Exception e) {
-			FileLogger.log(">> checkLoan err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> checkLoan err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -2053,7 +2052,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getInboxs Exception "+ e, LogType.ERROR);
+			log.fatal(" getInboxs Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -2082,7 +2081,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return result;
 		} catch (Exception e) {
-			FileLogger.log(">> checkTblBorrower err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> checkTblBorrower err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -2106,7 +2105,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 				return tblBorrower;
 			}
 		} catch (Exception e) {
-			FileLogger.log(" getTblBorrower Exception "+ e, LogType.ERROR);
+			log.fatal(" getTblBorrower Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -2131,7 +2130,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 				return tblBlackList;
 			}
 		} catch (Exception e) {
-			FileLogger.log(" getTblBlackList Exception "+ e, LogType.ERROR);
+			log.fatal(" getTblBlackList Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -2155,7 +2154,7 @@ public class DBFintechHome extends BaseSqlHomeDao{
 			System.out.println(list.size());
 			return (long)list.get(0);
 		} catch (Exception e) {
-			FileLogger.log(">> countTblBorrower err " + e.getMessage(),LogType.ERROR);
+			log.fatal(">> countTblBorrower err " , e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);

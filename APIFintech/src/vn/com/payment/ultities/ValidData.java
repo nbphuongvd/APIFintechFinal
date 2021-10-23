@@ -10,7 +10,6 @@ import java.util.regex.Pattern;
 import com.sun.corba.se.impl.transport.ReadTCPTimeoutsImpl;
 import com.sun.tools.internal.xjc.model.SymbolSpace;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.TblBlackList;
 import vn.com.payment.entities.TblBorrower;
 import vn.com.payment.home.DBFintechHome;
@@ -50,6 +49,7 @@ import vn.com.payment.services.UserInfo;
 import java.text.ParseException;
 
 public class ValidData {
+	private FileLogger log = new FileLogger(Utils.class);
 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	UserInfo userInfo = new UserInfo();
 	public static boolean isNumberInt(String num) {
@@ -582,21 +582,21 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqCreaterLoan.getUsername()) == false){
 				String messageErr = "Valid CreaterLoan Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resCreaterLoan.setStatus(statusFale);
 				resCreaterLoan.setMessage(messageErr);
 				return resCreaterLoan;
 			}
 			if (ValidData.checkNull(reqCreaterLoan.getToken()) == false){
 				String messageErr = "Valid CreaterLoan token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resCreaterLoan.setStatus(statusFale);
 				resCreaterLoan.setMessage(messageErr);
 				return resCreaterLoan;
 			}
 			if (ValidData.checkNull(reqCreaterLoan.getLoan_code()) == false){
 				String messageErr = "Valid CreaterLoan loan_code invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resCreaterLoan.setStatus(statusFale);
 				resCreaterLoan.setMessage(messageErr);
 				return resCreaterLoan;
@@ -605,49 +605,49 @@ public class ValidData {
 			if(checkContract){
 				if (ValidData.checkNull(reqCreaterLoan.getProduct_type()) == false){
 					String messageErr = "Valid CreaterLoan product_type invalid";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resCreaterLoan.setStatus(statusFale);
 					resCreaterLoan.setMessage(messageErr);
 					return resCreaterLoan;
 				}
 //				if (ValidData.checkNull(reqCreaterLoan.getProduct_brand()) == false){
 //					String messageErr = "Valid CreaterLoan product_brand invalid";
-//					FileLogger.log(messageErr, LogType.BUSSINESS);
+//					log.info(messageErr);
 //					resCreaterLoan.setStatus(statusFale);
 //					resCreaterLoan.setMessage(messageErr);
 //					return resCreaterLoan;
 //				}
 //				if (ValidData.checkNullLong(reqCreaterLoan.getTotal_run()) == false){
 //					String messageErr = "Valid CreaterLoan total_run invalid";
-//					FileLogger.log(messageErr, LogType.BUSSINESS);
+//					log.info(messageErr);
 //					resCreaterLoan.setStatus(statusFale);
 //					resCreaterLoan.setMessage(messageErr);
 //					return resCreaterLoan;
 //				}
 //				if (ValidData.checkNull(reqCreaterLoan.getBorrower_phone()) == false){
 //					String messageErr = "Valid CreaterLoan borrower_phone invalid";
-//					FileLogger.log(messageErr, LogType.BUSSINESS);
+//					log.info(messageErr);
 //					resCreaterLoan.setStatus(statusFale);
 //					resCreaterLoan.setMessage(messageErr);
 //					return resCreaterLoan;
 //				}
 //				if (ValidData.checkNull(reqCreaterLoan.getBorrower_email()) == false){
 //					String messageErr = "Valid CreaterLoan borrower_email invalid";
-//					FileLogger.log(messageErr, LogType.BUSSINESS);
+//					log.info(messageErr);
 //					resCreaterLoan.setStatus(statusFale);
 //					resCreaterLoan.setMessage(messageErr);
 //					return resCreaterLoan;
 //				}
 				if (ValidData.checkNull(reqCreaterLoan.getBorrower_id_number()) == false){
 					String messageErr = "Valid CreaterLoan borrower_id_number invalid";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resCreaterLoan.setStatus(statusFale);
 					resCreaterLoan.setMessage(messageErr);
 					return resCreaterLoan;
 				}
 				if (ValidData.checkNull(reqCreaterLoan.getLoan_amount()) == false){
 					String messageErr = "Valid CreaterLoan loan_amount invalid";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resCreaterLoan.setStatus(statusFale);
 					resCreaterLoan.setMessage(messageErr);
 					return resCreaterLoan;
@@ -655,7 +655,7 @@ public class ValidData {
 				
 				if (ValidData.isNumberic(String.valueOf(reqCreaterLoan.getLoan_amount())) == false){
 					String messageErr = "Valid CreaterLoan loan_amount invalid";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resCreaterLoan.setStatus(statusFale);
 					resCreaterLoan.setMessage(messageErr);
 					return resCreaterLoan;
@@ -663,27 +663,27 @@ public class ValidData {
 				
 				if (ValidData.checkNull(reqCreaterLoan.getProduct_valuation()) == false){
 					String messageErr = "Valid CreaterLoan product_valuation invalid";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resCreaterLoan.setStatus(statusFale);
 					resCreaterLoan.setMessage(messageErr);
 					return resCreaterLoan;
 				}
 				if (ValidData.checkNull(reqCreaterLoan.getBorrower_fullname()) == false){
 					String messageErr = "Valid CreaterLoan borrower_fullname invalid";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resCreaterLoan.setStatus(statusFale);
 					resCreaterLoan.setMessage(messageErr);
 					return resCreaterLoan;
 				}if (ValidData.checkNull(reqCreaterLoan.getBorrower_address()) == false){
 					String messageErr = "Valid CreaterLoan borrower_address invalid";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resCreaterLoan.setStatus(statusFale);
 					resCreaterLoan.setMessage(messageErr);
 					return resCreaterLoan;
 				}
 				if (ValidData.checkNull(reqCreaterLoan.getBorrower_id_number()) == false){
 					String messageErr = "Valid CreaterLoan borrower_id_number invalid";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resCreaterLoan.setStatus(statusFale);
 					resCreaterLoan.setMessage(messageErr);
 					return resCreaterLoan;
@@ -691,9 +691,9 @@ public class ValidData {
 			}			
 			boolean checkLG = userInfo.checkLogin(reqCreaterLoan.getUsername(), reqCreaterLoan.getToken());
 			if(!checkLG){
-				FileLogger.log("createrLoan: " + reqCreaterLoan.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("createrLoan: " + reqCreaterLoan.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resCreaterLoan.setStatus(statusFale);
 				resCreaterLoan.setMessage(messageErr);
 				return resCreaterLoan;
@@ -704,7 +704,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid CreaterLoan exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -715,7 +715,7 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqContractList.getUsername()) == false){
 				String messageErr = "Valid etContractList Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAllContractList.setStatus(statusFale);
 				resAllContractList.setMessage(messageErr);
 				resAllContractList.setContract_list(resContractList);
@@ -723,7 +723,7 @@ public class ValidData {
 			}
 			if (ValidData.checkNull(reqContractList.getToken()) == false){
 				String messageErr = "Valid etContractList token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAllContractList.setStatus(statusFale);
 				resAllContractList.setMessage(messageErr);
 				resAllContractList.setContract_list(resContractList);
@@ -732,7 +732,7 @@ public class ValidData {
 			if (ValidData.checkNull(reqContractList.getFrom_date()) == true){
 				if(ValidData.isValidDateStr(reqContractList.getFrom_date()) == false){
 					String messageErr = "Valid From_date invalid yyyyMMdd";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resAllContractList.setStatus(statusFale);
 					resAllContractList.setMessage(messageErr);
 					resAllContractList.setContract_list(resContractList);
@@ -742,7 +742,7 @@ public class ValidData {
 			if (ValidData.checkNull(reqContractList.getTo_date()) == true){
 				if(ValidData.isValidDateStr(reqContractList.getFrom_date()) == false){
 					String messageErr = "Valid To_date invalid yyyyMMdd";
-					FileLogger.log(messageErr, LogType.BUSSINESS);
+					log.info(messageErr);
 					resAllContractList.setStatus(statusFale);
 					resAllContractList.setMessage(messageErr);
 					resAllContractList.setContract_list(resContractList);
@@ -752,9 +752,9 @@ public class ValidData {
 
 			boolean checkLG = userInfo.checkLogin(reqContractList.getUsername(), reqContractList.getToken());
 			if(!checkLG){
-				FileLogger.log("etContractList: " + reqContractList.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("etContractList: " + reqContractList.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAllContractList.setStatus(statusFale);
 				resAllContractList.setMessage(messageErr);
 				resAllContractList.setContract_list(resContractList);
@@ -763,7 +763,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid resContractList exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -774,30 +774,30 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqStepLog.getUsername()) == false){
 				String messageErr = "Valid GetLogStepsList Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resStepLog.setStatus(statusFale);
 				resStepLog.setMessage(messageErr);
 				return resStepLog;
 			}
 			if (ValidData.checkNull(reqStepLog.getToken()) == false){
 				String messageErr = "Valid GetLogStepsList token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resStepLog.setStatus(statusFale);
 				resStepLog.setMessage(messageErr);
 				return resStepLog;
 			}
 			if (ValidData.checkNull(reqStepLog.getLoan_id()) == false){
 				String messageErr = "Valid GetLogStepsList loan_id invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resStepLog.setStatus(statusFale);
 				resStepLog.setMessage(messageErr);
 				return resStepLog;
 			}
 			boolean checkLG = userInfo.checkLogin(reqStepLog.getUsername(), reqStepLog.getToken());
 			if(!checkLG){
-				FileLogger.log("GetLogStepsList: " + reqStepLog.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("GetLogStepsList: " + reqStepLog.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resStepLog.setStatus(statusFale);
 				resStepLog.setMessage(messageErr);
 				return resStepLog;
@@ -805,7 +805,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid resContractList exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -817,30 +817,30 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqStepLog.getUsername()) == false){
 				String messageErr = "Valid validgetContractDetail Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resStepLog.setStatus(statusFale);
 				resStepLog.setMessage(messageErr);
 				return resStepLog;
 			}
 			if (ValidData.checkNull(reqStepLog.getToken()) == false){
 				String messageErr = "Valid validgetContractDetail token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resStepLog.setStatus(statusFale);
 				resStepLog.setMessage(messageErr);
 				return resStepLog;
 			}
 			if (ValidData.checkNull(reqStepLog.getLoan_id()) == false){
 				String messageErr = "Valid validgetContractDetail loan_id invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resStepLog.setStatus(statusFale);
 				resStepLog.setMessage(messageErr);
 				return resStepLog;
 			}
 			boolean checkLG = userInfo.checkLogin(reqStepLog.getUsername(), reqStepLog.getToken());
 			if(!checkLG){
-				FileLogger.log("validgetContractDetail: " + reqStepLog.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("validgetContractDetail: " + reqStepLog.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resStepLog.setStatus(statusFale);
 				resStepLog.setMessage(messageErr);
 				return resStepLog;
@@ -848,7 +848,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid validgetContractDetail exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -859,30 +859,30 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqUpdateStatus.getUsername()) == false){
 				String messageErr = "Valid validUpdateStatus Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUpdateStatus.setStatus(statusFale);
 				resUpdateStatus.setMessage(messageErr);
 				return resUpdateStatus;
 			}
 			if (ValidData.checkNull(reqUpdateStatus.getToken()) == false){
 				String messageErr = "Valid validUpdateStatus token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUpdateStatus.setStatus(statusFale);
 				resUpdateStatus.setMessage(messageErr);
 				return resUpdateStatus;
 			}
 			if (ValidData.checkNull(reqUpdateStatus.getLoan_code()) == false){
 				String messageErr = "Valid validUpdateStatus loan_id invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUpdateStatus.setStatus(statusFale);
 				resUpdateStatus.setMessage(messageErr);
 				return resUpdateStatus;
 			}
 			boolean checkLG = userInfo.checkLogin(reqUpdateStatus.getUsername(), reqUpdateStatus.getToken());
 			if(!checkLG){
-				FileLogger.log("validUpdateStatus: " + reqUpdateStatus.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("validUpdateStatus: " + reqUpdateStatus.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUpdateStatus.setStatus(statusFale);
 				resUpdateStatus.setMessage(messageErr);
 				return resUpdateStatus;
@@ -890,7 +890,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid validUpdateStatus exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -900,51 +900,51 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqUDExtendStatus.getUsername()) == false){
 				String messageErr = "Valid updateExtendStatus Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUDExtendStatus.setStatus(statusFale);
 				resUDExtendStatus.setMessage(messageErr);
 				return resUDExtendStatus;
 			}
 			if (ValidData.checkNull(reqUDExtendStatus.getToken()) == false){
 				String messageErr = "Valid updateExtendStatus token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUDExtendStatus.setStatus(statusFale);
 				resUDExtendStatus.setMessage(messageErr);
 				return resUDExtendStatus;
 			}
 			if (ValidData.checkNull(reqUDExtendStatus.getLoan_code()) == false){
 				String messageErr = "Valid updateExtendStatus Loan_code invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUDExtendStatus.setStatus(statusFale);
 				resUDExtendStatus.setMessage(messageErr);
 				return resUDExtendStatus;
 			}
 			if (ValidData.checkNull(reqUDExtendStatus.getExtend_status()) == false){
 				String messageErr = "Valid updateExtendStatus Extend_status invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUDExtendStatus.setStatus(statusFale);
 				resUDExtendStatus.setMessage(messageErr);
 				return resUDExtendStatus;
 			}
 			if (!reqUDExtendStatus.getExtend_status().equals("1163") && !reqUDExtendStatus.getExtend_status().equals("1164")){
 				String messageErr = "Valid updateExtendStatus Extend_status is incorrect";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUDExtendStatus.setStatus(statusFale);
 				resUDExtendStatus.setMessage(messageErr);
 				return resUDExtendStatus;
 			}
 			if (ValidData.checkNull(reqUDExtendStatus.getBill_index()) == false){
 				String messageErr = "Valid updateExtendStatus Bill_index invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUDExtendStatus.setStatus(statusFale);
 				resUDExtendStatus.setMessage(messageErr);
 				return resUDExtendStatus;
 			}
 			boolean checkLG = userInfo.checkLogin(reqUDExtendStatus.getUsername(), reqUDExtendStatus.getToken());
 			if(!checkLG){
-				FileLogger.log("updateExtendStatus: " + reqUDExtendStatus.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("updateExtendStatus: " + reqUDExtendStatus.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUDExtendStatus.setStatus(statusFale);
 				resUDExtendStatus.setMessage(messageErr);
 				return resUDExtendStatus;
@@ -952,7 +952,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid updateExtendStatus exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -962,21 +962,21 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqSentEmail.getUsername()) == false){
 				String messageErr = "Valid validSentEmail Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSentEmail.setStatus(statusFale);
 				resSentEmail.setMessage(messageErr);
 				return resSentEmail;
 			}
 			if (ValidData.checkNull(reqSentEmail.getToken()) == false){
 				String messageErr = "Valid validSentEmail token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSentEmail.setStatus(statusFale);
 				resSentEmail.setMessage(messageErr);
 				return resSentEmail;
 			}
 			if (ValidData.checkNull(reqSentEmail.getLoan_code()) == false){
 				String messageErr = "Valid validSentEmail Loan_code invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSentEmail.setStatus(statusFale);
 				resSentEmail.setMessage(messageErr);
 				return resSentEmail;
@@ -984,16 +984,16 @@ public class ValidData {
 
 			if (ValidData.checkNull(reqSentEmail.getBill_index()) == false){
 				String messageErr = "Valid validSentEmail Bill_index invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSentEmail.setStatus(statusFale);
 				resSentEmail.setMessage(messageErr);
 				return resSentEmail;
 			}
 			boolean checkLG = userInfo.checkLogin(reqSentEmail.getUsername(), reqSentEmail.getToken());
 			if(!checkLG){
-				FileLogger.log("validSentEmail: " + reqSentEmail.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("validSentEmail: " + reqSentEmail.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSentEmail.setStatus(statusFale);
 				resSentEmail.setMessage(messageErr);
 				return resSentEmail;
@@ -1001,7 +1001,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid validSentEmail exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -1011,30 +1011,30 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqAppraisal.getUsername()) == false){
 				String messageErr = "Valid validUpdateAppraisal Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAppraisal.setStatus(statusFale);
 				resAppraisal.setMessage(messageErr);
 				return resAppraisal;
 			}
 			if (ValidData.checkNull(reqAppraisal.getToken()) == false){
 				String messageErr = "Valid validUpdateAppraisal token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAppraisal.setStatus(statusFale);
 				resAppraisal.setMessage(messageErr);
 				return resAppraisal;
 			}
 			if (ValidData.checkNull(reqAppraisal.getLoan_code()) == false){
 				String messageErr = "Valid validUpdateAppraisal loan_id invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAppraisal.setStatus(statusFale);
 				resAppraisal.setMessage(messageErr);
 				return resAppraisal;
 			}
 			boolean checkLG = userInfo.checkLogin(reqAppraisal.getUsername(), reqAppraisal.getToken());
 			if(!checkLG){
-				FileLogger.log("validUpdateAppraisal: " + reqAppraisal.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("validUpdateAppraisal: " + reqAppraisal.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAppraisal.setStatus(statusFale);
 				resAppraisal.setMessage(messageErr);
 				return resAppraisal;
@@ -1042,7 +1042,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid validUpdateAppraisal exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -1052,30 +1052,30 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqAllotment.getUsername()) == false){
 				String messageErr = "Valid validSetAllotment Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAllotment.setStatus(statusFale);
 				resAllotment.setMessage(messageErr);
 				return resAllotment;
 			}
 			if (ValidData.checkNull(reqAllotment.getToken()) == false){
 				String messageErr = "Valid validSetAllotment token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAllotment.setStatus(statusFale);
 				resAllotment.setMessage(messageErr);
 				return resAllotment;
 			}
 			if (ValidData.checkNull(reqAllotment.getLoan_code()) == false){
 				String messageErr = "Valid validSetAllotment loan_id invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAllotment.setStatus(statusFale);
 				resAllotment.setMessage(messageErr);
 				return resAllotment;
 			}
 			boolean checkLG = userInfo.checkLogin(reqAllotment.getUsername(), reqAllotment.getToken());
 			if(!checkLG){
-				FileLogger.log("validSetAllotment: " + reqAllotment.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("validSetAllotment: " + reqAllotment.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resAllotment.setStatus(statusFale);
 				resAllotment.setMessage(messageErr);
 				return resAllotment;
@@ -1083,7 +1083,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid validSetAllotment exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -1093,23 +1093,23 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqDebtReminder.getUsername()) == false){
 				String messageErr = "Valid validGetdebtReminder Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resDebtReminder.setStatus(statusFale);
 				resDebtReminder.setMessage(messageErr);
 				return resDebtReminder;
 			}
 			if (ValidData.checkNull(reqDebtReminder.getToken()) == false){
 				String messageErr = "Valid validGetdebtReminder token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resDebtReminder.setStatus(statusFale);
 				resDebtReminder.setMessage(messageErr);
 				return resDebtReminder;
 			}
 			boolean checkLG = userInfo.checkLogin(reqDebtReminder.getUsername(), reqDebtReminder.getToken());
 			if(!checkLG){
-				FileLogger.log("GetdebtReminder : " + reqDebtReminder.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("GetdebtReminder : " + reqDebtReminder.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resDebtReminder.setStatus(statusFale);
 				resDebtReminder.setMessage(messageErr);
 				return resDebtReminder;
@@ -1117,7 +1117,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid validGetdebtReminder exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -1127,14 +1127,14 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqContractListSponsor.getUsername()) == false){
 				String messageErr = "Valid ListSponsor Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resContractListSponsor.setStatus(statusFale);
 				resContractListSponsor.setMessage(messageErr);
 				return resContractListSponsor;
 			}
 			if (ValidData.checkNull(reqContractListSponsor.getToken()) == false){
 				String messageErr = "Valid ListSponsor token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resContractListSponsor.setStatus(statusFale);
 				resContractListSponsor.setMessage(messageErr);
 				return resContractListSponsor;
@@ -1142,7 +1142,7 @@ public class ValidData {
 			
 //			if (ValidData.checkNull(reqContractListSponsor.getSponsor_id()) == false){
 //				String messageErr = "Valid ListSponsor Sponsor_id invalid";
-//				FileLogger.log(messageErr, LogType.BUSSINESS);
+//				log.info(messageErr);
 //				resContractListSponsor.setStatus(statusFale);
 //				resContractListSponsor.setMessage(messageErr);
 //				return resContractListSponsor;
@@ -1150,9 +1150,9 @@ public class ValidData {
 			
 			boolean checkLG = userInfo.checkLogin(reqContractListSponsor.getUsername(), reqContractListSponsor.getToken());
 			if(!checkLG){
-				FileLogger.log("ListSponsor : " + reqContractListSponsor.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("ListSponsor : " + reqContractListSponsor.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resContractListSponsor.setStatus(statusFale);
 				resContractListSponsor.setMessage(messageErr);
 				return resContractListSponsor;
@@ -1160,7 +1160,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid resContractList exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -1170,14 +1170,14 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqDisbursement.getUsername()) == false){
 				String messageErr = "Valid validDisbursement Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resDisbursement.setStatus(statusFale);
 				resDisbursement.setMessage(messageErr);
 				return resDisbursement;
 			}
 			if (ValidData.checkNull(reqDisbursement.getToken()) == false){
 				String messageErr = "Valid validDisbursement token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resDisbursement.setStatus(statusFale);
 				resDisbursement.setMessage(messageErr);
 				return resDisbursement;
@@ -1185,7 +1185,7 @@ public class ValidData {
 			
 			if (ValidData.checkNull(reqDisbursement.getLoan_code()) == false){
 				String messageErr = "Valid validDisbursement Loan_code invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resDisbursement.setStatus(statusFale);
 				resDisbursement.setMessage(messageErr);
 				return resDisbursement;
@@ -1193,7 +1193,7 @@ public class ValidData {
 			
 			if (ValidData.checkNullLong(reqDisbursement.getExpertise_status()) == false){
 				String messageErr = "Valid validDisbursement Expertise_status invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resDisbursement.setStatus(statusFale);
 				resDisbursement.setMessage(messageErr);
 				return resDisbursement;
@@ -1201,9 +1201,9 @@ public class ValidData {
 			
 			boolean checkLG = userInfo.checkLogin(reqDisbursement.getUsername(), reqDisbursement.getToken());
 			if(!checkLG){
-				FileLogger.log("validDisbursement : " + reqDisbursement.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("validDisbursement : " + reqDisbursement.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resDisbursement.setStatus(statusFale);
 				resDisbursement.setMessage(messageErr);
 				return resDisbursement;
@@ -1211,7 +1211,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid validDisbursement exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -1222,14 +1222,14 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqPayment.getUsername()) == false){
 				String messageErr = "Valid validDataPaymentLoan Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resPayment.setStatus(statusFale);
 				resPayment.setMessage(messageErr);
 				return resPayment;
 			}
 			if (ValidData.checkNull(reqPayment.getToken()) == false){
 				String messageErr = "Valid validDataPaymentLoan token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resPayment.setStatus(statusFale);
 				resPayment.setMessage(messageErr);
 				return resPayment;
@@ -1237,7 +1237,7 @@ public class ValidData {
 			
 			if (ValidData.checkNull(reqPayment.getLoan_code()) == false){
 				String messageErr = "Valid validDataPaymentLoan Loan_code invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resPayment.setStatus(statusFale);
 				resPayment.setMessage(messageErr);
 				return resPayment;
@@ -1245,14 +1245,14 @@ public class ValidData {
 			
 			if (ValidData.checkNull(reqPayment.getBill_index()) == false){
 				String messageErr = "Valid validDataPaymentLoan bill_index invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resPayment.setStatus(statusFale);
 				resPayment.setMessage(messageErr);
 				return resPayment;
 			}
 			if (ValidData.isNumberInt(reqPayment.getBill_index()) == false){
 				String messageErr = "Valid validDataPaymentLoan bill_index is incorrect";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resPayment.setStatus(statusFale);
 				resPayment.setMessage(messageErr);
 				return resPayment;
@@ -1260,7 +1260,7 @@ public class ValidData {
 			
 			if (ValidData.checkNullLong(reqPayment.getPay_amount()) == false){
 				String messageErr = "Valid validDataPaymentLoanPay_amount invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resPayment.setStatus(statusFale);
 				resPayment.setMessage(messageErr);
 				return resPayment;
@@ -1268,7 +1268,7 @@ public class ValidData {
 			
 			if (ValidData.isNumberInt(Long.toString(reqPayment.getPay_amount())) == false){
 				String messageErr = "Valid validDataPaymentLoan Pay_amount is incorrect";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resPayment.setStatus(statusFale);
 				resPayment.setMessage(messageErr);
 				return resPayment;
@@ -1276,7 +1276,7 @@ public class ValidData {
 			
 			if (ValidData.checkNull(reqPayment.getIs_a_special_payment()) == false){
 				String messageErr = "Valid validDataPaymentLoan Is_a_special_payment invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resPayment.setStatus(statusFale);
 				resPayment.setMessage(messageErr);
 				return resPayment;
@@ -1284,9 +1284,9 @@ public class ValidData {
 			
 			boolean checkLG = userInfo.checkLogin(reqPayment.getUsername(), reqPayment.getToken());
 			if(!checkLG){
-				FileLogger.log("validDataPaymentLoan : " + reqPayment.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("validDataPaymentLoan : " + reqPayment.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resPayment.setStatus(statusFale);
 				resPayment.setMessage(messageErr);
 				return resPayment;
@@ -1295,7 +1295,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid validDataPaymentLoan exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -1306,14 +1306,14 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqSettlement.getUsername()) == false){
 				String messageErr = "Valid validSettlement Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSettlement.setStatus(statusFale);
 				resSettlement.setMessage(messageErr);
 				return resSettlement;
 			}
 			if (ValidData.checkNull(reqSettlement.getToken()) == false){
 				String messageErr = "Valid validSettlement token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSettlement.setStatus(statusFale);
 				resSettlement.setMessage(messageErr);
 				return resSettlement;
@@ -1321,7 +1321,7 @@ public class ValidData {
 			
 			if (ValidData.checkNull(reqSettlement.getLoan_code()) == false){
 				String messageErr = "Valid validSettlement Loan_code invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSettlement.setStatus(statusFale);
 				resSettlement.setMessage(messageErr);
 				return resSettlement;
@@ -1329,7 +1329,7 @@ public class ValidData {
 			
 			if (ValidData.checkNullLong(reqSettlement.getPay_amount()) == false){
 				String messageErr = "Valid validSettlement invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSettlement.setStatus(statusFale);
 				resSettlement.setMessage(messageErr);
 				return resSettlement;
@@ -1337,7 +1337,7 @@ public class ValidData {
 			
 			if (ValidData.isNumberInt(Long.toString(reqSettlement.getPay_amount())) == false){
 				String messageErr = "Valid validSettlement Pay_amount is incorrect";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSettlement.setStatus(statusFale);
 				resSettlement.setMessage(messageErr);
 				return resSettlement;
@@ -1345,9 +1345,9 @@ public class ValidData {
 			
 			boolean checkLG = userInfo.checkLogin(reqSettlement.getUsername(), reqSettlement.getToken());
 			if(!checkLG){
-				FileLogger.log("validSettlement : " + reqSettlement.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("validSettlement : " + reqSettlement.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resSettlement.setStatus(statusFale);
 				resSettlement.setMessage(messageErr);
 				return resSettlement;
@@ -1356,7 +1356,7 @@ public class ValidData {
 		} catch (Exception e) {
 			e.printStackTrace();
 			String messageErr = "Valid validSettlement exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}
@@ -1367,38 +1367,39 @@ public class ValidData {
 		try {
 			if (ValidData.checkNull(reqUpdateInsurance.getUsername()) == false){
 				String messageErr = "Valid validDataUpdateInsurance Username invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUpdateInsurance.setStatus(statusFale);
 				resUpdateInsurance.setMessage(messageErr);
 				return resUpdateInsurance;
 			}
 			if (ValidData.checkNull(reqUpdateInsurance.getToken()) == false){
 				String messageErr = "Valid validDataUpdateInsurance token invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUpdateInsurance.setStatus(statusFale);
 				resUpdateInsurance.setMessage(messageErr);
 				return resUpdateInsurance;
 			}
 			if (ValidData.checkNull(reqUpdateInsurance.getLoan_code()) == false){
 				String messageErr = "Valid validDataUpdateInsurance loan_id invalid";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUpdateInsurance.setStatus(statusFale);
 				resUpdateInsurance.setMessage(messageErr);
 				return resUpdateInsurance;
 			}
 			boolean checkLG = userInfo.checkLogin(reqUpdateInsurance.getUsername(), reqUpdateInsurance.getToken());
 			if(!checkLG){
-				FileLogger.log("validDataUpdateInsurance: " + reqUpdateInsurance.getUsername()+ " check login false:", LogType.BUSSINESS);
+				log.info("validDataUpdateInsurance: " + reqUpdateInsurance.getUsername()+ " check login false:");
 				String messageErr = "Yeu cau that bai - Thong tin login sai";
-				FileLogger.log(messageErr, LogType.BUSSINESS);
+				log.info(messageErr);
 				resUpdateInsurance.setStatus(statusFale);
 				resUpdateInsurance.setMessage(messageErr);
 				return resUpdateInsurance;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.fatal(" Exx: ", e);
 			String messageErr = "Valid validDataUpdateInsurance exception: "+ e;
-			FileLogger.log(messageErr, LogType.ERROR);
+			log.fatal(messageErr);
 		}
 		return null;
 	}

@@ -15,7 +15,6 @@ import org.hibernate.criterion.Criterion;
 //import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import vn.com.payment.config.LogType;
 //import vn.com.payment.entities.SubPermission;
 import vn.com.payment.entities.TblBanks;
 import vn.com.payment.ultities.FileLogger;
@@ -30,7 +29,7 @@ public class TblBanksHome extends BaseSqlHomeDao{
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
+	private FileLogger log = new FileLogger(TblBanksHome.class);
 	public List<TblBanks> getTblBanks(int status, int bankSupport) {
 		List<TblBanks> results = new ArrayList<>();
 		Session session = null;
@@ -45,7 +44,7 @@ public class TblBanksHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getTblBanks Exception "+ e, LogType.ERROR);
+			log.fatal(" getTblBanks Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);

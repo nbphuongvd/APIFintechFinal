@@ -9,12 +9,11 @@ import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.config.MainCfg;
 import vn.com.payment.ultities.FileLogger;
 
 public class BaseMongoDB {
-
+	private FileLogger log = new FileLogger(BaseMongoDB.class);
 	int port_no = MainCfg.port_mongo;
 	String host_name = MainCfg.host_name_mongo, db_name = MainCfg.db_name;
 
@@ -65,7 +64,7 @@ public class BaseMongoDB {
 			coll.insertMany(illustration);
 		} catch (Exception e) {
 			// TODO: handle exception
-			FileLogger.log("insertDocument mongo Exception: " + e, LogType.ERROR);
+			log.fatal("insertDocument mongo Exception: " ,e);
 			e.printStackTrace();
 			return false;
 		}

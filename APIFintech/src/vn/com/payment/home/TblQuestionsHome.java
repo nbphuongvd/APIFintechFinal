@@ -11,7 +11,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.TblQuestions;
 import vn.com.payment.ultities.FileLogger;
 
@@ -22,7 +21,7 @@ import vn.com.payment.ultities.FileLogger;
  */
 @Stateless
 public class TblQuestionsHome extends BaseSqlHomeDao{
-
+	private FileLogger log = new FileLogger(TblQuestionsHome.class);
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -42,7 +41,7 @@ public class TblQuestionsHome extends BaseSqlHomeDao{
 			}	
 			return tblQuestions;
 		} catch (Exception e) {
-			FileLogger.log(" getProduct Exception "+ e, LogType.ERROR);
+			log.fatal(" getProduct Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);

@@ -15,7 +15,6 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import vn.com.payment.config.LogType;
 //import vn.com.payment.entities.GroupMapPer;
 import vn.com.payment.entities.SubPermission;
 //import vn.com.payment.entities.TblProduct;
@@ -30,7 +29,7 @@ import vn.com.payment.ultities.FileLogger;
 public class SubPermissionHome extends BaseSqlHomeDao{
 
 //	private static final Log log = LogFactory.getLog(SubPermissionHome.class);
-
+	private FileLogger log = new FileLogger(SubPermissionHome.class);
 	@PersistenceContext
 	private EntityManager entityManager;
 
@@ -46,7 +45,7 @@ public class SubPermissionHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getSubPermission Exception "+ e, LogType.ERROR);
+			log.fatal(" getSubPermission Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -68,7 +67,7 @@ public class SubPermissionHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getSubPermissionid Exception "+ e, LogType.ERROR);
+			log.fatal(" getSubPermissionid Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -93,7 +92,7 @@ public class SubPermissionHome extends BaseSqlHomeDao{
 			}
 			return subPermission;
 		} catch (Exception e) {
-			FileLogger.log(" getSubPermissionid Exception "+ e, LogType.ERROR);
+			log.fatal(" getSubPermissionid Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);

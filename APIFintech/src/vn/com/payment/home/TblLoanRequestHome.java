@@ -17,7 +17,6 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.TblImages;
 import vn.com.payment.entities.TblLoanBill;
 import vn.com.payment.entities.TblLoanReqDetail;
@@ -32,7 +31,7 @@ import vn.com.payment.ultities.FileLogger;
  */
 @Stateless
 public class TblLoanRequestHome extends BaseSqlHomeDao{
-
+	private FileLogger log = new FileLogger(TblLoanRequestHome.class);
 	@PersistenceContext
 	private EntityManager entityManager;
 	
@@ -43,7 +42,7 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createLoanRequest Exception "+ e, LogType.ERROR);
+			log.fatal("createLoanRequest Exception ", e);
 		}
 		return false;
 	}
@@ -55,7 +54,7 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 			return checkSaveTrans;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("TblLoanRequestHome createLoanRequest Exception "+ e, LogType.ERROR);
+			log.fatal("TblLoanRequestHome createLoanRequest Exception ", e);
 		}
 		return false;
 	}
@@ -67,7 +66,7 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 			return checkSaveTrans;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("TblLoanRequestHome createLoanRequest Exception "+ e, LogType.ERROR);
+			log.fatal("TblLoanRequestHome createLoanRequest Exception ", e);
 		}
 		return false;
 	}
@@ -79,7 +78,7 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 			return checkSaveTrans;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("TblLoanRequestHome createLoanTransIMG Exception "+ e, LogType.ERROR);
+			log.fatal("TblLoanRequestHome createLoanTransIMG Exception ", e);
 		}
 		return false;
 	}
@@ -90,7 +89,7 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("updateLoanRequest Exception "+ e, LogType.ERROR);
+			log.fatal("updateLoanRequest Exception ", e);
 		}
 		return false;
 	}
@@ -103,11 +102,11 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 			String sql = "SELECT AUTO_INCREMENT FROM information_schema.tables WHERE table_name = " + tableName;
 			SQLQuery<BigInteger> query = session.createSQLQuery(sql);
 			BigInteger sumAmount = query.uniqueResult();
-			System.err.println("sumAmount = " + sumAmount);
+			System.err.println("sumAmount1 = " + sumAmount.bitLength());
 			System.out.println("Aaa: "+ sumAmount);
 			return sumAmount;
 		} catch (Exception e) {
-			FileLogger.log(">> getIDAutoIncrement err " + e,LogType.ERROR);
+			log.fatal(">> getIDAutoIncrement err " , e);
 			e.printStackTrace();
 //			log.fatal("getListVaMap = " +e);
 		}finally {
@@ -132,7 +131,7 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 				result = false;
 			}			
 		} catch (Exception e) {
-			FileLogger.log(" getProduct Exception "+ e, LogType.ERROR);
+			log.fatal(" getProduct Exception ", e);
 			throw e;
 		} finally {
 			releaseSession(session);
@@ -164,7 +163,7 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 		} catch (Exception e) {
 			e.printStackTrace();
 //			log.fatal("getListVaMap = " +e);
-			FileLogger.log(">> getSeqContract err " + e,LogType.ERROR);
+			log.fatal(">> getSeqContract err " , e);
 		}finally {
 			releaseSession(session);
 		}
@@ -188,7 +187,7 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log(">> updateTblLoanRequest err " + e,LogType.ERROR);
+			log.fatal(">> updateTblLoanRequest err " , e);
 		}finally {
 			releaseSession(session);
 		}
@@ -228,9 +227,9 @@ public class TblLoanRequestHome extends BaseSqlHomeDao{
 //		tblLoanReqDetail.setCreatedDate(new Date());
 //		tblLoanReqDetail.setEditedDate(new Date());
 //		tblLoanReqDetail.setDisbursementDate(aa.intValue());
+		BigInteger a = tblLoanReqDetailHome.getIDAutoIncrement();
 		
-		
-		BigDecimal a =  tblLoanReqDetailHome.getSeqContract();
+//		BigDecimal a =  tblLoanReqDetailHome.getSeqContract();
 
 		System.out.println(a);
 	}

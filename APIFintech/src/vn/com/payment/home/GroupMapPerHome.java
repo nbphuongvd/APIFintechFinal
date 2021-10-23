@@ -15,7 +15,6 @@ import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.GroupMapPer;
 import vn.com.payment.entities.TblRateConfig;
 import vn.com.payment.ultities.FileLogger;
@@ -28,7 +27,7 @@ import vn.com.payment.ultities.FileLogger;
 @Stateless
 public class GroupMapPerHome extends BaseSqlHomeDao{
 
-	private static final Log log = LogFactory.getLog(GroupMapPerHome.class);
+	private FileLogger log = new FileLogger(GroupMapPerHome.class);
 
 	@PersistenceContext
 	private EntityManager entityManager;
@@ -45,7 +44,7 @@ public class GroupMapPerHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getGroupMapPer Exception "+ e, LogType.ERROR);
+			log.fatal(" getGroupMapPer Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);

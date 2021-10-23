@@ -8,11 +8,13 @@ import java.util.UUID;
 import org.springframework.util.SerializationUtils;
 
 import redis.clients.jedis.Jedis;
-import vn.com.payment.config.LogType;
+import vn.com.payment.home.SubPermissionHome;
 import vn.com.payment.object.NotifyObject;
 import vn.com.payment.ultities.FileLogger;
 public class RedisBusiness {
-		
+	
+	private static FileLogger log = new FileLogger(RedisBusiness.class);
+	
 	private static void test_connecttoRedis() {
 		Jedis conn = null;
 		try {
@@ -37,13 +39,13 @@ public class RedisBusiness {
 			temp = conn.get(key);
 //			FileLogger.log(">> -----getStringValue_toCacheTime: " + key +"___Value: " + temp, LogType.REQUEST);
 		} catch (Exception e) {
-			FileLogger.log(">> getValue_fromCache -----EX: " + e.getMessage(), LogType.ERROR);
+			log.fatal(">> getValue_fromCache -----EX: " , e);
 			e.printStackTrace();
 		} finally {
 			try {
 				Pool.ReleaseConnection(conn);
 			} catch (Exception e) {
-				FileLogger.log(">> getValue_fromCache ReleaseConnection -----EX: " + e.getMessage(), LogType.ERROR);
+				log.fatal(">> getValue_fromCache ReleaseConnection -----EX: " , e);
 				e.printStackTrace();
 			}
 		}
@@ -53,20 +55,20 @@ public class RedisBusiness {
 		Jedis conn = null;
 		boolean result = false;
 		try {
-			FileLogger.log(">> -----setStringValue_toCacheTime: " + key +"___Value: " + value, LogType.USERINFO);
+			log.info(">> -----setStringValue_toCacheTime: " + key +"___Value: " + value);
 			conn = Pool.getConnection();
 			conn.set(key, value);
 			conn.expire(key, expiretime);
 			result = true;
-			FileLogger.log(">> -----setStringValue_toCacheTime: " + key +"___Value: " + value + "----result true", LogType.USERINFO);
+			log.info(">> -----setStringValue_toCacheTime: " + key +"___Value: " + value + "----result true");
 		} catch (Exception e) {
-			FileLogger.log(">> setValue_toCacheTime -----e: " + e, LogType.ERROR);
+			log.fatal(">> setValue_toCacheTime -----e: " , e);
 			e.printStackTrace();
 		} finally {
 			try {
 				Pool.ReleaseConnection(conn);
 			} catch (Exception e) {
-				FileLogger.log(">> setValue_toCacheTime -----ReleaseConnection: " + e, LogType.ERROR);
+				log.fatal(">> setValue_toCacheTime -----ReleaseConnection: " , e);
 				e.printStackTrace();
 			}
 		}
@@ -80,7 +82,7 @@ public class RedisBusiness {
 			conn.rpush(key.getBytes(), obj.getBytes(StandardCharsets.UTF_8));
 			return true;
 		} catch (Exception e) {
-			FileLogger.log("enQueue "+e, LogType.ERROR);
+			log.fatal("enQueue ", e);
 			e.printStackTrace();
 		} finally {
 			try {
@@ -102,7 +104,7 @@ public class RedisBusiness {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			FileLogger.log("dequeue "+e, LogType.ERROR);
+			log.fatal("dequeue ", e);
 //			logger.fatal("queueRequestToRedis", e);
 		} finally {
 			try {

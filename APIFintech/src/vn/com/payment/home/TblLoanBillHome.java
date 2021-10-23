@@ -12,7 +12,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.TblLoanBill;
 import vn.com.payment.ultities.FileLogger;
 
@@ -28,7 +27,7 @@ public class TblLoanBillHome extends BaseSqlHomeDao{
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
+	private FileLogger log = new FileLogger(TblLoanBillHome.class);
 
 	public List<TblLoanBill> getTblLoanBill(int loan_id) {
 		List<TblLoanBill> results = new ArrayList<>();
@@ -42,7 +41,7 @@ public class TblLoanBillHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getTblLoanBill Exception "+ e, LogType.ERROR);
+			log.fatal(" getTblLoanBill Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -64,7 +63,7 @@ public class TblLoanBillHome extends BaseSqlHomeDao{
 			results = crtProduct.list();
 			return results;
 		} catch (Exception e) {
-			FileLogger.log(" getTblLoanBill Exception "+ e, LogType.ERROR);
+			log.fatal(" getTblLoanBill Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);
@@ -90,7 +89,7 @@ public class TblLoanBillHome extends BaseSqlHomeDao{
 			}
 			return tblLoanBill;
 		} catch (Exception e) {
-			FileLogger.log(" getTblLoanBillIndex Exception "+ e, LogType.ERROR);
+			log.fatal(" getTblLoanBillIndex Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);

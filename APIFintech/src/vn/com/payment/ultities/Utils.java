@@ -18,14 +18,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.config.MainCfg;
 import vn.com.payment.entities.TblLoanRequest;
 import vn.com.payment.object.NotifyObject;
 import vn.com.payment.redis.RedisBusiness;
 
 public class Utils {
-
+	private FileLogger log = new FileLogger(Utils.class);
 	private static MessageDigest msgDigest = null;
 	static {
 		try {
@@ -372,11 +371,11 @@ public class Utils {
 			notifyObject.setReceive_chat_id_expect(receive_chat_id_expect);
 			notifyObject.setService_code(service_code);
 			notifyObject.setSub_service_code(sub_service_code);
-			FileLogger.log("sentNotify key : " + key, LogType.USERINFO);
-			FileLogger.log("sentNotify notifyObject : " + notifyObject.toJSON(), LogType.USERINFO);
+			log.info("sentNotify key : " + key);
+			log.info("sentNotify notifyObject : " + notifyObject.toJSON());
 			RedisBusiness redisBusiness = new RedisBusiness();
 			boolean checkPush = redisBusiness.enQueueToRedis(key, notifyObject.toJSON());
-			FileLogger.log("sentNotify checkPush : " + checkPush, LogType.USERINFO);
+			log.info("sentNotify checkPush : " + checkPush);
 			if (checkPush) {
 				sent = true;
 			} else {

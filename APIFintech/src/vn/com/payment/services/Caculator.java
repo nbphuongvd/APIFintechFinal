@@ -8,7 +8,6 @@ import java.util.List;
 import org.apache.commons.math.util.MathUtils;
 import org.bson.Document;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.TblLoanBill;
 import vn.com.payment.entities.TblQuestions;
 import vn.com.payment.home.TblQuestionsHome;
@@ -19,7 +18,7 @@ import vn.com.payment.ultities.FileLogger;
 import vn.com.payment.ultities.Utils;
 
 public class Caculator {
-
+	private FileLogger log = new FileLogger(Caculator.class);
 	int lamtronHangDonvi = 1;
 	int lamtronKhong = 0;
 	public int questionPercent(String userName, List<ObjQuestions> questionsList){
@@ -44,7 +43,7 @@ public class Caculator {
 			return percent;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createrLoan : " + userName + " questionPercent exception" + e, LogType.ERROR);
+			log.fatal("createrLoan : " + userName + " questionPercent exception" , e);
 		}
 		return result;
 	}
@@ -55,7 +54,7 @@ public class Caculator {
 		ArrayList<Document> array = new ArrayList<Document>();
 		List<TblLoanBill> feesListSet = new ArrayList<>();
 		try {
-			FileLogger.log("getIllustration: " + userName + " illustrationIns:" + loaitrano, LogType.BUSSINESS);
+			log.info("getIllustration: " + userName + " illustrationIns:" + loaitrano);
 			double sotienconlai_a = sotienvay;
 			double gocconlai = sotienvay;
 			double gocconlaiTinhtattoan = sotienvay;
@@ -350,12 +349,11 @@ public class Caculator {
 			// phí tất toán trước hạn chỉ bằng = tiền gốc còn lại + lãi trong
 			// tháng + phí dịch vụ trong tháng + phi tư vấn trong tháng + phí
 			// trả nợ trước hạn (tính theo tháng)
-			FileLogger.log("illustration: " + userName + " illustrationIns array insert DB:" + array,
-					LogType.BUSSINESS);
+			log.info("illustration: " + userName + " illustrationIns array insert DB:" + array);
 
 			return array;
 		} catch (Exception e) {
-			FileLogger.log("illustration: " + userName + " illustrationIns exception" + e, LogType.ERROR);
+			log.fatal("illustration: " + userName + " illustrationIns exception" , e);
 			e.printStackTrace();
 		}
 		return null;
@@ -367,7 +365,7 @@ public class Caculator {
 		ArrayList<Document> array = new ArrayList<Document>();
 		List<TblLoanBill> feesListSet = new ArrayList<>();
 		try {
-			FileLogger.log("getIllustration: " + userName + " illustrationIns:" + loaitrano, LogType.BUSSINESS);
+			log.info("getIllustration: " + userName + " illustrationIns:" + loaitrano);
 			double sotienconlai_a = sotienvay;
 			double gocconlai = sotienvay;
 			double gocconlaiTinhtattoan = sotienvay;
@@ -656,12 +654,11 @@ public class Caculator {
 			// phí tất toán trước hạn chỉ bằng = tiền gốc còn lại + lãi trong
 			// tháng + phí dịch vụ trong tháng + phi tư vấn trong tháng + phí
 			// trả nợ trước hạn (tính theo tháng)
-			FileLogger.log("illustration: " + userName + " illustrationIns array insert DB:" + array,
-					LogType.BUSSINESS);
+			log.info("illustration: " + userName + " illustrationIns array insert DB:" + array);
 
 			return feesListSet;
 		} catch (Exception e) {
-			FileLogger.log("illustration: " + userName + " illustrationIns exception" + e, LogType.ERROR);
+			log.fatal("illustration: " + userName + " illustrationIns exception" , e);
 			e.printStackTrace();
 		}
 		return null;

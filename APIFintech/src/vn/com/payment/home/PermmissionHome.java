@@ -12,7 +12,6 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.Permmission;
 import vn.com.payment.ultities.FileLogger;
 
@@ -26,7 +25,7 @@ public class PermmissionHome extends BaseSqlHomeDao{
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
+	private FileLogger log = new FileLogger(PermmissionHome.class);
 	public Permmission getPermmission(int rowId) {
 		List<Permmission> results = new ArrayList<>();
 		Session session = null;
@@ -42,7 +41,7 @@ public class PermmissionHome extends BaseSqlHomeDao{
 			}
 			return permmission;
 		} catch (Exception e) {
-			FileLogger.log(" getSubPermissionid Exception "+ e, LogType.ERROR);
+			log.fatal(" getSubPermissionid Exception ", e);
 			e.printStackTrace();
 		} finally {
 			releaseSession(session);

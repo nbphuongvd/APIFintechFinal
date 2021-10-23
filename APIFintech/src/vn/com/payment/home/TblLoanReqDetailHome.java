@@ -4,7 +4,6 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import vn.com.payment.config.LogType;
 import vn.com.payment.entities.TblLoanReqDetail;
 import vn.com.payment.ultities.FileLogger;
 
@@ -18,7 +17,7 @@ public class TblLoanReqDetailHome extends BaseSqlHomeDao{
 
 	@PersistenceContext
 	private EntityManager entityManager;
-
+	private FileLogger log = new FileLogger(TblLoanReqDetailHome.class);
 	public boolean createLoanReqDetail(TblLoanReqDetail tblLoanReqDetail) {
 		try {
 			save(tblLoanReqDetail);
@@ -26,7 +25,7 @@ public class TblLoanReqDetailHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("createLoanReqDetail Exception "+ e, LogType.ERROR);
+			log.fatal("createLoanReqDetail Exception ", e);
 		}
 		return false;
 	}
@@ -37,7 +36,7 @@ public class TblLoanReqDetailHome extends BaseSqlHomeDao{
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
-			FileLogger.log("updateLoanReqDetail Exception "+ e, LogType.ERROR);
+			log.fatal("updateLoanReqDetail Exception ", e);
 		}
 		return false;
 	}
